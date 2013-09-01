@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/new/images">
+        <file>bold.png</file>
+        <file>clear.png</file>
+        <file>color.png</file>
+        <file>italic.png</file>
+        <file>save.png</file>
+        <file>chakan.png</file>
+        <file>modifyRemark.png</file>
+    </qresource>
+</RCC>
