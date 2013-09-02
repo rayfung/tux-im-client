@@ -20,7 +20,8 @@ public:
     bool login(QTcpSocket *tcpSocket, quint32 account, QString pwd,
                QString ip, quint16 port, UserMessage &userMessage);
     bool getUserList(QTcpSocket *tcpSocket, QVector<FriendMessage> &friendMessageList);
-    bool checkUserMessage(QTcpSocket *tcpSocket, quint32 account, QVector<FriendMessage> &friendMessageList);
+    bool getUserProfile(QTcpSocket *tcpSocket, quint32 account,
+                        QVector<FriendMessage> &friendList);
     bool deleteFriend(QTcpSocket *tcpSocket, quint32 account);
     bool addFriend(QTcpSocket *tcpSocket, quint32 account, QString displayName);
     bool getIpAndPort(QTcpSocket *tcpSocket, quint32 account, AddrMessage &addrMessage);

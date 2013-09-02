@@ -137,7 +137,7 @@ void Tux::actionShowProfileTriggered()
     if(index < 0)
         return;
 
-    UserInformation *userInfo = new UserInformation(friendList.at(index));
+    UserInformation *userInfo = new UserInformation(friendList.at(index), true);
 
     userInfo->setAttribute(Qt::WA_DeleteOnClose);
     userInfo->show();
@@ -151,6 +151,22 @@ void Tux::on_findButton_clicked()
     uid = QInputDialog::getInt(NULL, "查询用户", "请输入用户账号：", 0, 0, 99887766, 1, &ok);
     if(ok)
     {
+        QVector<FriendMessage> list;
+        if(api.getUserProfile(Utils::getInstance()->getTcpSocket(), uid, list))
+        {
+            if(list.size() > 0)
+            {
+                UserInformation *userInfo = new UserInformation(list.at(0), false);
+
+                connect(userInfo, SIGNAL(newFriend()), this, SLOT(refreshFriendList()));
+                userInfo->setAttribute(Qt::WA_DeleteOnClose);
+                userInfo->show();
+            }
+            else
+            {
+                QMessageBox::information(0, "提示", QString("账号 %1 不存在").arg(uid));
+            }
+        }
     }
 }
 

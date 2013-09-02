@@ -86,8 +86,8 @@ bool IMAPI::getUserList(QTcpSocket *tcpSocket, QVector<FriendMessage> &friendMes
     return true;
 }
 
-bool IMAPI::checkUserMessage(QTcpSocket *tcpSocket, quint32 account,
-                             QVector<FriendMessage> &friendMessageList)
+bool IMAPI::getUserProfile(QTcpSocket *tcpSocket, quint32 account,
+                             QVector<FriendMessage> &friendList)
 {
     quint32         count;
     FriendMessage   friendMessage;
@@ -108,7 +108,7 @@ bool IMAPI::checkUserMessage(QTcpSocket *tcpSocket, quint32 account,
     {
         in >> (friendMessage.account) >> (friendMessage.isOnLine) >> (friendMessage.nickName)
            >> (friendMessage.displayName) >> (friendMessage.sex) >> (friendMessage.area);
-        friendMessageList.push_back(friendMessage);
+        friendList.push_back(friendMessage);
     }
 
     return true;
