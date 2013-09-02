@@ -18,7 +18,9 @@ SOURCES += main.cpp\
     chatwindow.cpp \
     tux.cpp \
     registration.cpp \
-    login.cpp
+    login.cpp \
+    network/server.cpp \
+    network/datapool.cpp
 
 HEADERS  += \
     netsocket.h \
@@ -29,7 +31,9 @@ HEADERS  += \
     chatwindow.h \
     tux.h \
     registration.h \
-    login.h
+    login.h \
+    network/server.h \
+    network/datapool.h
 
 FORMS    += \
     userinformation.ui \

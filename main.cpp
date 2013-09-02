@@ -1,6 +1,9 @@
 #include <QtGui/QApplication>
 #include <QTextCodec>
 #include "login.h"
+#include "network/datapool.h"
+
+DataPool g_dataPool;
 
 int main(int argc, char *argv[])
 {
