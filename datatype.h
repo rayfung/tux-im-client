@@ -4,9 +4,11 @@
 #include <QString>
 
 typedef struct {
+    quint32 account;
     QString name;
     QString  sex;
     QString area;
+    QString pwd;
 } UserMessage;
 
 typedef struct {

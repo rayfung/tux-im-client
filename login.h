@@ -1,13 +1,15 @@
 #ifndef LOGIN_H
 #define LOGIN_H
 
-#include <QWidget>
+#include <QDialog>
+
+#include "datatype.h"
 
 namespace Ui {
     class Login;
 }
 
-class Login : public QWidget
+class Login : public QDialog
 {
     Q_OBJECT
 
@@ -18,8 +20,11 @@ public:
 private:
     Ui::Login *ui;
 
+    UserMessage    userMessage;
+
 private slots:
-    void on_regButton_clicked();
+    void on_registerPushButton_clicked();
+    void on_loginPushButton_clicked();
 };
 
-#endif // WIDGET_H
+#endif // LOGIN_H

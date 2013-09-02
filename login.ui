@@ -1,62 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>Login</class>
- <widget class="QWidget" name="Login">
+ <widget class="QDialog" name="Login">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>350</height>
+    <height>298</height>
    </rect>
   </property>
-  <property name="minimumSize">
-   <size>
-    <width>400</width>
-    <height>350</height>
-   </size>
-  </property>
-  <property name="maximumSize">
-   <size>
-    <width>400</width>
-    <height>350</height>
-   </size>
-  </property>
   <property name="windowTitle">
-   <string>Login</string>
+   <string>登录</string>
   </property>
-  <widget class="QLabel" name="userLabel">
+  <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
-     <x>80</x>
-     <y>120</y>
+     <x>90</x>
+     <y>100</y>
      <width>54</width>
      <height>12</height>
     </rect>
    </property>
    <property name="text">
-    <string>用户帐号：</string>
+    <string>账号：</string>
    </property>
   </widget>
-  <widget class="QLabel" name="pwdLabel">
+  <widget class="QLabel" name="label_2">
    <property name="geometry">
     <rect>
-     <x>80</x>
-     <y>150</y>
+     <x>90</x>
+     <y>140</y>
      <width>54</width>
      <height>12</height>
     </rect>
    </property>
    <property name="text">
-    <string>用户密码：</string>
+    <string>密码：</string>
    </property>
   </widget>
-  <widget class="QLineEdit" name="userLineEdit">
+  <widget class="QLineEdit" name="accountLineEdit">
    <property name="geometry">
     <rect>
-     <x>140</x>
-     <y>120</y>
-     <width>201</width>
+     <x>130</x>
+     <y>90</y>
+     <width>161</width>
      <height>20</height>
     </rect>
    </property>
@@ -64,18 +52,21 @@
   <widget class="QLineEdit" name="pwdLineEdit">
    <property name="geometry">
     <rect>
-     <x>140</x>
-     <y>150</y>
-     <width>201</width>
+     <x>130</x>
+     <y>140</y>
+     <width>161</width>
      <height>20</height>
     </rect>
    </property>
+   <property name="echoMode">
+    <enum>QLineEdit::Password</enum>
+   </property>
   </widget>
-  <widget class="QPushButton" name="loginButton">
+  <widget class="QPushButton" name="loginPushButton">
    <property name="geometry">
     <rect>
-     <x>140</x>
-     <y>180</y>
+     <x>90</x>
+     <y>190</y>
      <width>75</width>
      <height>23</height>
     </rect>
@@ -84,21 +75,20 @@
     <string>登录</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="regButton">
+  <widget class="QPushButton" name="registerPushButton">
    <property name="geometry">
     <rect>
-     <x>220</x>
-     <y>180</y>
-     <width>121</width>
+     <x>180</x>
+     <y>190</y>
+     <width>111</width>
      <height>23</height>
     </rect>
    </property>
    <property name="text">
-    <string>注册帐号</string>
+    <string>注册账号</string>
    </property>
   </widget>
  </widget>
- <layoutdefault spacing="6" margin="11"/>
  <resources/>
  <connections/>
 </ui>

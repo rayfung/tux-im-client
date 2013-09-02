@@ -17,10 +17,11 @@ SOURCES += main.cpp\
     userinformation.cpp \
     chatwindow.cpp \
     tux.cpp \
-    registration.cpp \
-    login.cpp \
     network/server.cpp \
-    network/datapool.cpp
+    network/datapool.cpp \
+    login.cpp \
+    registration.cpp \
+    utils.cpp
 
 HEADERS  += \
     netsocket.h \
@@ -30,17 +31,18 @@ HEADERS  += \
     userinformation.h \
     chatwindow.h \
     tux.h \
-    registration.h \
-    login.h \
     network/server.h \
-    network/datapool.h
+    network/datapool.h \
+    login.h \
+    registration.h \
+    utils.h
 
 FORMS    += \
     userinformation.ui \
     chatwindow.ui \
     tux.ui \
-    registration.ui \
-    login.ui
+    login.ui \
+    registration.ui
 
 RESOURCES += \
     images/images.qrc

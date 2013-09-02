@@ -3,10 +3,11 @@
 #include "registration.h"
 
 Login::Login(QWidget *parent) :
-    QWidget(parent),
+    QDialog(parent),
     ui(new Ui::Login)
 {
     ui->setupUi(this);
+    this->setFixedSize(this->size());
 }
 
 Login::~Login()
@@ -14,8 +15,16 @@ Login::~Login()
     delete ui;
 }
 
-void Login::on_regButton_clicked()
+void Login::on_loginPushButton_clicked()
 {
-    Registration *reg = new Registration;
-    reg->show();
+
+}
+
+void Login::on_registerPushButton_clicked()
+{
+    Registration registration(&userMessage);
+
+    this->hide();
+    registration.exec();
+    this->show();
 }
