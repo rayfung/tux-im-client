@@ -1,7 +1,7 @@
 #include "config.h"
 #include <QTextStream>
 
-Config::Config() : ipAddress("127.0.0.1"), port(9866), bindPort(9888)
+Config::Config() : ipAddress("127.0.0.1"), port(9866), bindPort(0)
 {
     QFile   file("config.ini");
 

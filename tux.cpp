@@ -42,6 +42,10 @@ void Tux::refreshFriendList()
         else
             name = friendList.at(i).displayName + " (" + friendList.at(i).nickName + ")";
         ui->listWidgetFriend->addItem(name);
+        if(friendList.at(i).isOnLine)
+            ui->listWidgetFriend->item(i)->setTextColor(Qt::black);
+        else
+            ui->listWidgetFriend->item(i)->setTextColor(Qt::gray);
     }
 }
 
