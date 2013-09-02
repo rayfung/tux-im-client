@@ -14,7 +14,7 @@ typedef struct {
 typedef struct {
     quint32 account;
     bool    isOnLine;
-    QString name;
+    QString displayName;
     QString nickName;
     QString sex;
     QString area;

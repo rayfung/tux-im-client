@@ -5,8 +5,10 @@
 #include <QPoint>
 #include <QMenu>
 #include <QAction>
+#include <QVector>
 
 #include "datatype.h"
+#include "imapi.h"
 
 namespace Ui {
 class Tux;
@@ -22,9 +24,11 @@ public:
 
 private:
     void setupMenu();
+    void showFriendList();
     
 private slots:
-    void popupMenu(const QPoint &point);
+    void popupMenu(QPoint point);
+    void actionDeleteFriendTriggered();
     void on_findButton_clicked();
 
 private:
@@ -33,6 +37,9 @@ private:
     QAction *actionShowFriendProfile;
     QAction *actionModifyFriendDisplayName;
     QAction *actionDeleteFriend;
+    UserMessage userMsg;
+    QVector<FriendMessage> friendList;
+    IMAPI api;
 };
 
 #endif

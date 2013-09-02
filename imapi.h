@@ -21,8 +21,8 @@ public:
                QString ip, quint16 port, UserMessage &userMessage);
     bool getUserList(QTcpSocket *tcpSocket, QVector<FriendMessage> &friendMessageList);
     bool checkUserMessage(QTcpSocket *tcpSocket, quint32 account, QVector<FriendMessage> &friendMessageList);
-    bool delelteFriend(QTcpSocket *tcpSocket, quint32 account);
-    bool addFriend(QTcpSocket *tcpSocket, quint32 account, QString nickName);
+    bool deleteFriend(QTcpSocket *tcpSocket, quint32 account);
+    bool addFriend(QTcpSocket *tcpSocket, quint32 account, QString displayName);
     bool getIpAndPort(QTcpSocket *tcpSocket, quint32 account, AddrMessage &addrMessage);
     bool modifyFriendNickName(QTcpSocket *tcpSocket, quint32 account, QString newNickName);
     bool modifyPwd(QTcpSocket *tcpSocket, QString pwd);

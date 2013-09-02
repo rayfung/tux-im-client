@@ -78,8 +78,8 @@ bool IMAPI::getUserList(QTcpSocket *tcpSocket, QVector<FriendMessage> &friendMes
     in >> count;
     for(quint32 i = 0; i < count; i++)
     {
-        in >> (friendMessage.account) >> (friendMessage.isOnLine) >> (friendMessage.name)
-           >> (friendMessage.nickName) >> (friendMessage.sex) >> (friendMessage.area);
+        in >> (friendMessage.account) >> (friendMessage.isOnLine) >> (friendMessage.nickName)
+           >> (friendMessage.displayName) >> (friendMessage.sex) >> (friendMessage.area);
         friendMessageList.push_back(friendMessage);
     }
 
@@ -106,15 +106,15 @@ bool IMAPI::checkUserMessage(QTcpSocket *tcpSocket, quint32 account,
     in >> count;
     if(count == 1)
     {
-        in >> (friendMessage.account) >> (friendMessage.isOnLine) >> (friendMessage.name)
-           >> (friendMessage.nickName) >> (friendMessage.sex) >> (friendMessage.area);
+        in >> (friendMessage.account) >> (friendMessage.isOnLine) >> (friendMessage.nickName)
+           >> (friendMessage.displayName) >> (friendMessage.sex) >> (friendMessage.area);
         friendMessageList.push_back(friendMessage);
     }
 
     return true;
 }
 
-bool IMAPI::delelteFriend(QTcpSocket *tcpSocket, quint32 account)
+bool IMAPI::deleteFriend(QTcpSocket *tcpSocket, quint32 account)
 {
     bool        flag;
     QByteArray  inBytes;
@@ -136,7 +136,7 @@ bool IMAPI::delelteFriend(QTcpSocket *tcpSocket, quint32 account)
     return true;
 }
 
-bool IMAPI::addFriend(QTcpSocket *tcpSocket, quint32 account, QString nickName)
+bool IMAPI::addFriend(QTcpSocket *tcpSocket, quint32 account, QString displayName)
 {
     bool        flag;
     QByteArray  bytes;
@@ -148,7 +148,7 @@ bool IMAPI::addFriend(QTcpSocket *tcpSocket, quint32 account, QString nickName)
     out.setVersion(QDataStream::Qt_4_6);
     out << (quint8)0x06;
     out << account;
-    out << nickName;
+    out << displayName;
     netSocket->sendData(tcpSocket, bytes);
     if(!netSocket->readData(tcpSocket, inBytes))
         return false;
