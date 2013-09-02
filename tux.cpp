@@ -132,7 +132,7 @@ void Tux::on_findButton_clicked()
     bool ok;
     quint32 uid;
 
-    uid = QInputDialog::getInt(this, "查询用户", "请输入用户账号：", 0, 0, 99887766, 1, &ok);
+    uid = QInputDialog::getInt(NULL, "查询用户", "请输入用户账号：", 0, 0, 99887766, 1, &ok);
     if(ok)
     {
     }

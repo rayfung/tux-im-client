@@ -29,12 +29,19 @@ void Registration::on_registerPushButton_clicked()
        || ui->pwdLineEdit->text().trimmed().isEmpty()
        || ui->areaLineEdit->text().trimmed().isEmpty())
     {
-        QMessageBox::warning(this, "提示", "请填写完整信息!!!");
+        QMessageBox::warning(this, "提示", "请填写完整信息!");
+        return;
+    }
+    if(ui->lineEditConfirm->text() != ui->pwdLineEdit->text())
+    {
+        QMessageBox::warning(this, "提示", "两次输入的密码不一致");
+        ui->pwdLineEdit->setFocus();
+        ui->pwdLineEdit->selectAll();
         return;
     }
     this->userMessage->name = ui->nickNameLineEdit->text();
     this->userMessage->pwd  = ui->pwdLineEdit->text();
-    this->userMessage->sex  = (ui->sexComboBox->currentIndex()) ? "f" : "m";
+    this->userMessage->sex  = (ui->sexComboBox->currentIndex() ? "f" : "m");
     this->userMessage->area = ui->areaLineEdit->text();
     tcpSocket = Utils::getInstance()->getTcpSocket();
     if(!imAPI.registration(tcpSocket, this->userMessage->pwd,

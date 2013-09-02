@@ -1,16 +1,16 @@
 #include "config.h"
 #include <QTextStream>
 
-Config::Config() : ipAddress("10.30.25.35"), port(9866), bindPort(9888)
+Config::Config() : ipAddress("127.0.0.1"), port(9866), bindPort(9888)
 {
-    QFile   file("conf.ini");
+    QFile   file("config.ini");
 
     if(file.exists())
     {
         if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-                 return;
+            return;
 
-             QTextStream in(&file);
-             in >> ipAddress >> port >> bindPort;
+        QTextStream in(&file);
+        in >> ipAddress >> port >> bindPort;
     }
 }

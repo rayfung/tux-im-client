@@ -53,9 +53,7 @@ void Login::on_loginPushButton_clicked()
 
 void Login::on_registerPushButton_clicked()
 {
-    Registration registration;
+    Registration registration(this);
 
-    this->hide();
     registration.exec();
-    this->show();
 }
