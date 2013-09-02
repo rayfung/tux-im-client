@@ -66,11 +66,23 @@ void Tux::popupMenu(QPoint point)
     menu->popup(ui->listWidgetFriend->mapToGlobal(point));
 }
 
+int Tux::getSelectedRow()
+{
+    int index;
+    QList<QListWidgetItem *> list;
+
+    list = ui->listWidgetFriend->selectedItems();
+    if(list.size() != 1)
+        return -1;
+    index = ui->listWidgetFriend->row(list.at(0));
+    return index;
+}
+
 void Tux::actionDeleteFriendTriggered()
 {
     int index;
 
-    index = ui->listWidgetFriend->currentRow();
+    index = getSelectedRow();
     if(index < 0)
         return;
     QString name = friendList.at(index).nickName;
@@ -93,7 +105,7 @@ void Tux::actionModDisplayNameTriggered()
     QString name;
     int index;
 
-    index = ui->listWidgetFriend->currentRow();
+    index = getSelectedRow();
     if(index < 0)
         return;
 
@@ -117,7 +129,7 @@ void Tux::actionShowProfileTriggered()
 {
     int index;
 
-    index = ui->listWidgetFriend->currentRow();
+    index = getSelectedRow();
     if(index < 0)
         return;
 

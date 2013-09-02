@@ -25,6 +25,7 @@ public:
 
 private:
     void setupMenu();
+    int getSelectedRow();
     
 private slots:
     void popupMenu(QPoint point);
