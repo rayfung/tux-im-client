@@ -29,6 +29,7 @@ private:
 private slots:
     void popupMenu(QPoint point);
     void refreshFriendList();
+    void actionShowProfileTriggered();
     void actionDeleteFriendTriggered();
     void actionModDisplayNameTriggered();
     void on_findButton_clicked();

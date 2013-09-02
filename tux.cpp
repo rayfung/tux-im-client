@@ -54,6 +54,8 @@ void Tux::setupMenu()
     actionDeleteFriend = menu->addAction("删除好友");
 
     connect(actionRefresh, SIGNAL(triggered()), this, SLOT(refreshFriendList()));
+    connect(actionShowFriendProfile, SIGNAL(triggered()),
+            this, SLOT(actionShowProfileTriggered()));
     connect(actionDeleteFriend, SIGNAL(triggered()), this, SLOT(actionDeleteFriendTriggered()));
     connect(actionModifyFriendDisplayName, SIGNAL(triggered()),
             this, SLOT(actionModDisplayNameTriggered()));
@@ -111,6 +113,20 @@ void Tux::actionModDisplayNameTriggered()
     }
 }
 
+void Tux::actionShowProfileTriggered()
+{
+    int index;
+
+    index = ui->listWidgetFriend->currentRow();
+    if(index < 0)
+        return;
+
+    UserInformation *userInfo = new UserInformation(friendList.at(index));
+
+    userInfo->setAttribute(Qt::WA_DeleteOnClose);
+    userInfo->show();
+}
+
 void Tux::on_findButton_clicked()
 {
     bool ok;
@@ -119,10 +135,5 @@ void Tux::on_findButton_clicked()
     uid = QInputDialog::getInt(this, "查询用户", "请输入用户账号：", 0, 0, 99887766, 1, &ok);
     if(ok)
     {
-        UserInformation *userInformation;
-
-        userInformation = new UserInformation();
-        userInformation->setAttribute(Qt::WA_DeleteOnClose);
-        userInformation->show();
     }
 }

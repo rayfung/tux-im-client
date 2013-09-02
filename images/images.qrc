@@ -5,8 +5,8 @@
         <file>color.png</file>
         <file>italic.png</file>
         <file>save.png</file>
-        <file>modifyRemark.png</file>
         <file>find.png</file>
         <file>BabyGnuTux-Med-Alpha.png</file>
+        <file>Tux.png</file>
     </qresource>
 </RCC>
