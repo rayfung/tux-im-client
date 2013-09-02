@@ -63,6 +63,20 @@ void Tux::setupMenu()
     connect(actionDeleteFriend, SIGNAL(triggered()), this, SLOT(actionDeleteFriendTriggered()));
     connect(actionModifyFriendDisplayName, SIGNAL(triggered()),
             this, SLOT(actionModDisplayNameTriggered()));
+
+    trayMenu = new QMenu(this);
+    actionShowOrHide = trayMenu->addAction("显示主窗口");
+    actionShowOrHide->setCheckable(true);
+    actionShowOrHide->setChecked(true);
+    trayMenu->addSeparator();
+    actionQuit = trayMenu->addAction("退出");
+    connect(actionShowOrHide, SIGNAL(toggled(bool)), this, SLOT(setVisible(bool)));
+    connect(actionQuit, SIGNAL(triggered()), this, SLOT(close()));
+
+    trayIcon = new QSystemTrayIcon(this);
+    trayIcon->setIcon(QIcon(":/new/images/app.png"));
+    trayIcon->setContextMenu(trayMenu);
+    trayIcon->show();
 }
 
 void Tux::popupMenu(QPoint point)

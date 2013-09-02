@@ -7,6 +7,7 @@
 #include <QAction>
 #include <QVector>
 #include <QTimer>
+#include <QSystemTrayIcon>
 
 #include "datatype.h"
 #include "imapi.h"
@@ -47,6 +48,10 @@ private:
     QVector<FriendMessage> friendList;
     IMAPI api;
     QTimer timer;
+    QSystemTrayIcon *trayIcon;
+    QMenu *trayMenu;
+    QAction *actionShowOrHide;
+    QAction *actionQuit;
 };
 
 #endif

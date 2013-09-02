@@ -8,5 +8,6 @@
         <file>find.png</file>
         <file>BabyGnuTux-Med-Alpha.png</file>
         <file>Tux.png</file>
+        <file>app.png</file>
     </qresource>
 </RCC>
