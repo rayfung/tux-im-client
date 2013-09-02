@@ -16,7 +16,9 @@ SOURCES += main.cpp\
     imapi.cpp \
     userinformation.cpp \
     chatwindow.cpp \
-    tux.cpp
+    tux.cpp \
+    registration.cpp \
+    login.cpp
 
 HEADERS  += \
     netsocket.h \
@@ -25,12 +27,16 @@ HEADERS  += \
     datatype.h \
     userinformation.h \
     chatwindow.h \
-    tux.h
+    tux.h \
+    registration.h \
+    login.h
 
 FORMS    += \
     userinformation.ui \
     chatwindow.ui \
-    tux.ui
+    tux.ui \
+    registration.ui \
+    login.ui
 
 RESOURCES += \
     images/images.qrc
