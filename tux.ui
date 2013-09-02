@@ -79,7 +79,11 @@ p, li { white-space: pre-wrap; }
       </layout>
      </item>
      <item>
-      <widget class="QLineEdit" name="findFriendLineEdit"/>
+      <widget class="QLineEdit" name="lineEditSearch">
+       <property name="toolTip">
+        <string>搜索好友</string>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="QLabel" name="FriendListLabel">

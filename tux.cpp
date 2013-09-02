@@ -40,7 +40,7 @@ void Tux::refreshFriendList()
         if(friendList.at(i).displayName.isEmpty())
             name = friendList.at(i).nickName;
         else
-            name = friendList.at(i).displayName + "(" + friendList.at(i).nickName + ")";
+            name = friendList.at(i).displayName + " (" + friendList.at(i).nickName + ")";
         ui->listWidgetFriend->addItem(name);
     }
 }
@@ -148,4 +148,40 @@ void Tux::on_findButton_clicked()
     if(ok)
     {
     }
+}
+
+void Tux::on_lineEditSearch_textEdited(const QString &text)
+{
+    int k = -1;
+
+    for(int i = 0; i < friendList.size(); ++i)
+    {
+        if(friendList.at(i).displayName.contains(text, Qt::CaseInsensitive))
+        {
+            k = i;
+            goto move_selection;
+        }
+    }
+
+    for(int i = 0; i < friendList.size(); ++i)
+    {
+        if(friendList.at(i).nickName.contains(text, Qt::CaseInsensitive))
+        {
+            k = i;
+            goto move_selection;
+        }
+    }
+
+    for(int i = 0; i < friendList.size(); ++i)
+    {
+        if(QString::number(friendList.at(i).account).contains(text, Qt::CaseInsensitive))
+        {
+            k = i;
+            goto move_selection;
+        }
+    }
+
+move_selection:
+    if(k >= 0)
+        ui->listWidgetFriend->setCurrentRow(k);
 }

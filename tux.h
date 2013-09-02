@@ -34,6 +34,7 @@ private slots:
     void actionDeleteFriendTriggered();
     void actionModDisplayNameTriggered();
     void on_findButton_clicked();
+    void on_lineEditSearch_textEdited(const QString &text);
 
 private:
     Ui::Tux *ui;
