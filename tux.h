@@ -29,10 +29,11 @@ private:
     void setupMenu();
     int getSelectedRow();
     void closeEvent(QCloseEvent *e);
-    
+
 private slots:
     void popupMenu(QPoint point);
     void refreshFriendList();
+    void askForQuit();
     void actionShowProfileTriggered();
     void actionDeleteFriendTriggered();
     void actionModDisplayNameTriggered();

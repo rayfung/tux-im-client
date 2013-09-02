@@ -30,16 +30,20 @@ Tux::~Tux()
 
 void Tux::closeEvent(QCloseEvent *e)
 {
+    e->ignore();
+    hide();
+    actionShowOrHide->setChecked(false);
+}
+
+void Tux::askForQuit()
+{
     if(QMessageBox::question(this, "询问", "你确定要退出吗？",
                              QMessageBox::Ok | QMessageBox::Cancel,
                              QMessageBox::Cancel)
             == QMessageBox::Ok)
     {
-        e->accept();
         QTimer::singleShot(0, qApp, SLOT(quit()));
     }
-    else
-        e->ignore();
 }
 
 void Tux::refreshFriendList()
@@ -84,8 +88,8 @@ void Tux::setupMenu()
     actionShowOrHide->setChecked(true);
     trayMenu->addSeparator();
     actionQuit = trayMenu->addAction("退出");
-    connect(actionShowOrHide, SIGNAL(toggled(bool)), this, SLOT(setVisible(bool)));
-    connect(actionQuit, SIGNAL(triggered()), this, SLOT(close()));
+    connect(actionShowOrHide, SIGNAL(triggered(bool)), this, SLOT(setVisible(bool)));
+    connect(actionQuit, SIGNAL(triggered()), this, SLOT(askForQuit()));
 
     trayIcon = new QSystemTrayIcon(this);
     trayIcon->setIcon(QIcon(":/new/images/app.png"));
