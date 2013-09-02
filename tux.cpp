@@ -13,7 +13,7 @@ Tux::Tux(UserMessage userMessage, QWidget *parent) :
     ui->setupUi(this);
     ui->UserNameLabel->setText(userMsg.name);
 
-    timer.setInterval(30000);
+    timer.setInterval(2 * 60 * 1000);
     refreshFriendList();
     setupMenu();
     connect(ui->listWidgetFriend, SIGNAL(customContextMenuRequested(QPoint)),
