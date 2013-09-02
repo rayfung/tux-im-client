@@ -2,6 +2,7 @@
 #include <QTextCodec>
 #include "login.h"
 #include "network/datapool.h"
+#include "chatwindow.h"
 #include "tux.h"
 
 DataPool g_dataPool;
