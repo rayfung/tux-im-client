@@ -28,6 +28,20 @@ Tux::~Tux()
     delete ui;
 }
 
+void Tux::closeEvent(QCloseEvent *e)
+{
+    if(QMessageBox::question(this, "询问", "你确定要退出吗？",
+                             QMessageBox::Ok | QMessageBox::Cancel,
+                             QMessageBox::Cancel)
+            == QMessageBox::Ok)
+    {
+        e->accept();
+        QTimer::singleShot(0, qApp, SLOT(quit()));
+    }
+    else
+        e->ignore();
+}
+
 void Tux::refreshFriendList()
 {
     friendList.clear();

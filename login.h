@@ -2,6 +2,7 @@
 #define LOGIN_H
 
 #include <QDialog>
+#include <QCloseEvent>
 
 #include "datatype.h"
 
@@ -18,8 +19,10 @@ public:
     ~Login();
 
 private:
-    Ui::Login *ui;
+    void closeEvent(QCloseEvent *e);
 
+private:
+    Ui::Login *ui;
     UserMessage    userMessage;
 
 private slots:

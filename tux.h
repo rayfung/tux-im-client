@@ -8,6 +8,7 @@
 #include <QVector>
 #include <QTimer>
 #include <QSystemTrayIcon>
+#include <QCloseEvent>
 
 #include "datatype.h"
 #include "imapi.h"
@@ -27,6 +28,7 @@ public:
 private:
     void setupMenu();
     int getSelectedRow();
+    void closeEvent(QCloseEvent *e);
     
 private slots:
     void popupMenu(QPoint point);

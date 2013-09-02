@@ -15,6 +15,8 @@ Server   g_server;
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+    a.setQuitOnLastWindowClosed(false);
+
     QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
     Config  config;
 

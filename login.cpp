@@ -8,6 +8,7 @@
 
 #include <QTcpSocket>
 #include <QMessageBox>
+#include <QTimer>
 
 Login::Login(QWidget *parent) :
     QDialog(parent),
@@ -20,6 +21,12 @@ Login::Login(QWidget *parent) :
 Login::~Login()
 {
     delete ui;
+}
+
+void Login::closeEvent(QCloseEvent *e)
+{
+    e->accept();
+    QTimer::singleShot(0, qApp, SLOT(quit()));
 }
 
 void Login::on_loginPushButton_clicked()
@@ -48,7 +55,7 @@ void Login::on_loginPushButton_clicked()
     }
     tux = new Tux(this->userMessage);
     tux->show();
-    this->close();
+    this->hide();
 }
 
 void Login::on_registerPushButton_clicked()
