@@ -30,7 +30,7 @@ void Login::on_loginPushButton_clicked()
     QTcpSocket *tcpSocket;
 
     if(ui->accountLineEdit->text().trimmed().isEmpty() ||
-       ui->pwdLineEdit->text().trimmed().isEmpty())
+       ui->pwdLineEdit->text().isEmpty())
     {
         QMessageBox::information(this, "提示", "请填好账号和密码!");
         return;

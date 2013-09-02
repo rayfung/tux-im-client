@@ -26,7 +26,7 @@ void Registration::on_registerPushButton_clicked()
     QTcpSocket  *tcpSocket;
 
     if(ui->nickNameLineEdit->text().trimmed().isEmpty()
-       || ui->pwdLineEdit->text().trimmed().isEmpty()
+       || ui->pwdLineEdit->text().isEmpty()
        || ui->areaLineEdit->text().trimmed().isEmpty())
     {
         QMessageBox::warning(this, "提示", "请填写完整信息!");
