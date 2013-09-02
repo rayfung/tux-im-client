@@ -20,7 +20,7 @@ Tux::Tux(UserMessage userMessage, QWidget *parent) :
             this, SLOT(popupMenu(QPoint)));
     connect(&timer, SIGNAL(timeout()), this, SLOT(refreshFriendList()));
 
-    timer.start();
+    //timer.start();
 }
 
 Tux::~Tux()
