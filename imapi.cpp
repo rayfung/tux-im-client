@@ -182,7 +182,7 @@ bool IMAPI::getIpAndPort(QTcpSocket *tcpSocket, quint32 account, AddrMessage &ad
     return true;
 }
 
-bool IMAPI::modifyFriendNickName(QTcpSocket *tcpSocket, quint32 account, QString newNickName)
+bool IMAPI::modifyFriendDisplayName(QTcpSocket *tcpSocket, quint32 account, QString newName)
 {
     bool        flag;
     QByteArray  inBytes;
@@ -194,7 +194,7 @@ bool IMAPI::modifyFriendNickName(QTcpSocket *tcpSocket, quint32 account, QString
     out.setVersion(QDataStream::Qt_4_6);
     out << (quint8)0xE0;
     out << account;
-    out << newNickName;
+    out << newName;
     netSocket->sendData(tcpSocket, outBytes);
     if(!netSocket->readData(tcpSocket, inBytes))
         return false;

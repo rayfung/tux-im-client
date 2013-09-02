@@ -6,6 +6,7 @@
 #include <QMenu>
 #include <QAction>
 #include <QVector>
+#include <QTimer>
 
 #include "datatype.h"
 #include "imapi.h"
@@ -24,22 +25,25 @@ public:
 
 private:
     void setupMenu();
-    void showFriendList();
     
 private slots:
     void popupMenu(QPoint point);
+    void refreshFriendList();
     void actionDeleteFriendTriggered();
+    void actionModDisplayNameTriggered();
     void on_findButton_clicked();
 
 private:
     Ui::Tux *ui;
     QMenu *menu;
+    QAction *actionRefresh;
     QAction *actionShowFriendProfile;
     QAction *actionModifyFriendDisplayName;
     QAction *actionDeleteFriend;
     UserMessage userMsg;
     QVector<FriendMessage> friendList;
     IMAPI api;
+    QTimer timer;
 };
 
 #endif
