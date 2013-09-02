@@ -3,7 +3,7 @@
 #include "userinformation.h"
 #include <QInputDialog>
 
-Tux::Tux(QWidget *parent) :
+Tux::Tux(UserMessage userMessage, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::Tux)
 {

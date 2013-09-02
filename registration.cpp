@@ -5,17 +5,18 @@
 #include <QMessageBox>
 #include <QTcpSocket>
 
-Registration::Registration(UserMessage *userMessage, QWidget *parent) :
+Registration::Registration(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::Registration)
 {
     ui->setupUi(this);
     this->setFixedSize(this->size());
-    this->userMessage = userMessage;
+    userMessage = new UserMessage;
 }
 
 Registration::~Registration()
 {
+    delete userMessage;
     delete ui;
 }
 

@@ -1,6 +1,13 @@
 #include "login.h"
 #include "ui_login.h"
 #include "registration.h"
+#include "tux.h"
+#include "utils.h"
+#include "imapi.h"
+#include "network/server.h"
+
+#include <QTcpSocket>
+#include <QMessageBox>
 
 Login::Login(QWidget *parent) :
     QDialog(parent),
@@ -17,12 +24,36 @@ Login::~Login()
 
 void Login::on_loginPushButton_clicked()
 {
+    extern Server   g_server;
+    Tux         *tux;
+    IMAPI       imAPI;
+    QTcpSocket *tcpSocket;
 
+    if(ui->accountLineEdit->text().trimmed().isEmpty() ||
+       ui->pwdLineEdit->text().trimmed().isEmpty())
+    {
+        QMessageBox::information(this, "提示", "请填好账号和密码!");
+        return;
+    }
+
+    this->userMessage.account = (quint32)ui->accountLineEdit->text().toUInt();
+    this->userMessage.pwd = ui->pwdLineEdit->text();
+    tcpSocket = Utils::getInstance()->getTcpSocket();
+    if(!imAPI.login(tcpSocket, ui->accountLineEdit->text().toUInt(),
+                    ui->pwdLineEdit->text(), g_server.getIp(), g_server.getPort(),
+                    this->userMessage))
+    {
+        QMessageBox::information(this, "提示", "账号或密码错误!");
+        return;
+    }
+    tux = new Tux(this->userMessage);
+    tux->show();
+    this->close();
 }
 
 void Login::on_registerPushButton_clicked()
 {
-    Registration registration(&userMessage);
+    Registration registration;
 
     this->hide();
     registration.exec();

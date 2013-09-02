@@ -14,7 +14,7 @@ class Registration : public QDialog
     Q_OBJECT
 
 public:
-    explicit Registration(UserMessage *userMessage, QWidget *parent = 0);
+    explicit Registration(QWidget *parent = 0);
     ~Registration();
 
 private:

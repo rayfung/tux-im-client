@@ -11,6 +11,8 @@ public:
 
     QString ipAddress;
     quint16 port;
+
+    quint16 bindPort;
 };
 
 #endif // CONFIG_H

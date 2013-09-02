@@ -6,6 +6,8 @@
 #include <QMenu>
 #include <QAction>
 
+#include "datatype.h"
+
 namespace Ui {
 class Tux;
 }
@@ -15,7 +17,7 @@ class Tux : public QWidget
     Q_OBJECT
     
 public:
-    explicit Tux(QWidget *parent = 0);
+    explicit Tux(UserMessage userMessage, QWidget *parent = 0);
     ~Tux();
 
 private:
