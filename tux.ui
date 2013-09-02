@@ -102,7 +102,7 @@ p, li { white-space: pre-wrap; }
          <property name="minimumSize">
           <size>
            <width>0</width>
-           <height>32</height>
+           <height>48</height>
           </size>
          </property>
          <property name="maximumSize">
@@ -111,18 +111,12 @@ p, li { white-space: pre-wrap; }
            <height>16777215</height>
           </size>
          </property>
-         <property name="font">
-          <font>
-           <family>SimSun-ExtB</family>
-           <pointsize>9</pointsize>
-          </font>
-         </property>
          <property name="text">
           <string>查找</string>
          </property>
          <property name="icon">
           <iconset resource="images/images.qrc">
-           <normaloff>:/new/images/chakan.png</normaloff>:/new/images/chakan.png</iconset>
+           <normaloff>:/new/images/find.png</normaloff>:/new/images/find.png</iconset>
          </property>
          <property name="iconSize">
           <size>

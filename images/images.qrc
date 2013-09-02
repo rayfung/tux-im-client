@@ -5,7 +5,7 @@
         <file>color.png</file>
         <file>italic.png</file>
         <file>save.png</file>
-        <file>chakan.png</file>
         <file>modifyRemark.png</file>
+        <file>find.png</file>
     </qresource>
 </RCC>
