@@ -264,7 +264,7 @@ ChatWindow *Tux::getChatWindow(FriendMessage info)
     {
         ChatWindow *chat;
 
-        chat = new ChatWindow(info, this);
+        chat = new ChatWindow(info);
         chatWindowMap[uid] = chat;
     }
     return chatWindowMap[uid];
