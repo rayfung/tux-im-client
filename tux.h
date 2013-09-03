@@ -31,6 +31,7 @@ private:
     void closeEvent(QCloseEvent *e);
 
 private slots:
+    void on_pushButtonPersonal_clicked();
     void popupMenu(QPoint point);
     void refreshFriendList();
     void askForQuit();
@@ -39,6 +40,7 @@ private slots:
     void actionModDisplayNameTriggered();
     void on_findButton_clicked();
     void on_lineEditSearch_textEdited(const QString &text);
+    void showNewNickName(QString nickName);
 
 private:
     Ui::Tux *ui;

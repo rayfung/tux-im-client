@@ -2,6 +2,7 @@
 #include "ui_tux.h"
 #include "userinformation.h"
 #include "utils.h"
+#include "personalcenter.h"
 #include <QInputDialog>
 #include <QMessageBox>
 
@@ -236,4 +237,19 @@ void Tux::on_lineEditSearch_textEdited(const QString &text)
 move_selection:
     if(k >= 0)
         ui->listWidgetFriend->setCurrentRow(k);
+}
+
+void Tux::on_pushButtonPersonal_clicked()
+{
+    PersonalCenter  *personalCenter = new PersonalCenter(userMsg);
+
+    connect(personalCenter, SIGNAL(modifyMessage(QString)),
+            this, SLOT(showNewNickName(QString)));
+    personalCenter->setAttribute(Qt::WA_DeleteOnClose);
+    personalCenter->show();
+}
+
+void Tux::showNewNickName(QString nickName)
+{
+    ui->UserNameLabel->setText(nickName);
 }

@@ -21,7 +21,8 @@ SOURCES += main.cpp\
     network/datapool.cpp \
     login.cpp \
     registration.cpp \
-    utils.cpp
+    utils.cpp \
+    personalcenter.cpp
 
 HEADERS  += \
     netsocket.h \
@@ -35,14 +36,16 @@ HEADERS  += \
     network/datapool.h \
     login.h \
     registration.h \
-    utils.h
+    utils.h \
+    personalcenter.h
 
 FORMS    += \
     userinformation.ui \
     chatwindow.ui \
     tux.ui \
     login.ui \
-    registration.ui
+    registration.ui \
+    personalcenter.ui
 
 RESOURCES += \
     images/images.qrc
