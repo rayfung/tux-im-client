@@ -103,6 +103,17 @@ void Tux::setupMenu()
     trayIcon->setIcon(QIcon(":/new/images/app.png"));
     trayIcon->setContextMenu(trayMenu);
     trayIcon->show();
+    connect(trayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
+            this, SLOT(trayIconActivated(QSystemTrayIcon::ActivationReason)));
+}
+
+void Tux::trayIconActivated(QSystemTrayIcon::ActivationReason reason)
+{
+    if(reason == QSystemTrayIcon::Trigger)
+    {
+        actionShowOrHide->setChecked(true);
+        this->show();
+    }
 }
 
 void Tux::popupMenu(QPoint point)

@@ -46,6 +46,7 @@ private slots:
     void on_findButton_clicked();
     void on_lineEditSearch_textEdited(const QString &text);
     void on_listWidgetFriend_itemDoubleClicked(QListWidgetItem *item);
+    void trayIconActivated(QSystemTrayIcon::ActivationReason reason);
 
 private:
     Ui::Tux *ui;
