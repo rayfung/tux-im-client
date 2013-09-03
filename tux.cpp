@@ -272,6 +272,7 @@ void Tux::on_pushButtonPersonal_clicked()
 
 void Tux::showNewNickName(QString nickName)
 {
+    profile.name = nickName;
     ui->UserNameLabel->setText(nickName);
 }
 
