@@ -159,7 +159,7 @@ bool IMAPI::addFriend(QTcpSocket *tcpSocket, quint32 account, QString displayNam
     return true;
 }
 
-bool IMAPI::getIpAndPort(QTcpSocket *tcpSocket, quint32 account, AddrMessage &addrMessage)
+bool IMAPI::getIpAndPort(QTcpSocket *tcpSocket, quint32 account, AddrInfo &addr)
 {
     bool        flag;
     QByteArray  outBytes;
@@ -177,7 +177,7 @@ bool IMAPI::getIpAndPort(QTcpSocket *tcpSocket, quint32 account, AddrMessage &ad
     in >> flag;
     if(!flag)
         return false;
-    in >> (addrMessage.ipAddr) >> (addrMessage.port);
+    in >> (addr.ipAddr) >> (addr.port);
 
     return true;
 }

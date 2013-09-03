@@ -143,7 +143,7 @@ void ChatWindow::on_comboBoxFontSize_currentIndexChanged(const QString &size)
 
 bool ChatWindow::establishConnection(enum Connection::ConnectionType type, QString path)
 {
-    AddrMessage addr;
+    AddrInfo addr;
     QTcpSocket *socket;
 
     if(g_dataPool.isConnected(friendInfo.account, type))

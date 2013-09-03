@@ -24,7 +24,7 @@ public:
                         QVector<FriendMessage> &friendList);
     bool deleteFriend(QTcpSocket *tcpSocket, quint32 account);
     bool addFriend(QTcpSocket *tcpSocket, quint32 account, QString displayName);
-    bool getIpAndPort(QTcpSocket *tcpSocket, quint32 account, AddrMessage &addrMessage);
+    bool getIpAndPort(QTcpSocket *tcpSocket, quint32 account, AddrInfo &addr);
     bool modifyFriendDisplayName(QTcpSocket *tcpSocket, quint32 account, QString newName);
     bool modifyPwd(QTcpSocket *tcpSocket, QString pwd);
     bool modifyUserMessage(QTcpSocket *tcpSocket, QString name, QString sex, QString area);
