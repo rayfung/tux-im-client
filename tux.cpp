@@ -45,6 +45,7 @@ void Tux::askForQuit()
             == QMessageBox::Ok)
     {
         Utils::getInstance()->getTcpSocket()->close();
+        trayIcon->hide();
         QTimer::singleShot(0, qApp, SLOT(quit()));
     }
 }
@@ -102,6 +103,7 @@ void Tux::setupMenu()
     trayIcon = new QSystemTrayIcon(this);
     trayIcon->setIcon(QIcon(":/new/images/app.png"));
     trayIcon->setContextMenu(trayMenu);
+    trayIcon->setToolTip(userMsg.name);
     trayIcon->show();
     connect(trayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
             this, SLOT(trayIconActivated(QSystemTrayIcon::ActivationReason)));
@@ -112,7 +114,8 @@ void Tux::trayIconActivated(QSystemTrayIcon::ActivationReason reason)
     if(reason == QSystemTrayIcon::Trigger)
     {
         actionShowOrHide->setChecked(true);
-        this->show();
+        this->showNormal();
+        this->activateWindow();
     }
 }
 
