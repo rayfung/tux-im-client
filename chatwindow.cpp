@@ -33,8 +33,6 @@ ChatWindow::ChatWindow(UserMessage me, FriendMessage friendInfo, QWidget *parent
         num.setNum(i);
         ui->comboBoxFontSize->addItem(num);
     }
-    isBold = false;
-    isItalic = false;
 
     connect(&g_dataPool, SIGNAL(newMessage(quint32,QString)),
             this, SLOT(newMessage(quint32,QString)));
@@ -145,12 +143,12 @@ void ChatWindow::on_pushButtonChooseFile_clicked()
 
 void ChatWindow::on_toolButtonClear_clicked()
 {
-    ui->textEditChatMsg->setPlainText("");
+    ui->textEditChatMsg->clear();
 }
 
 void ChatWindow::on_fontComboBox_currentFontChanged(const QFont &f)
 {
-    inputBox->setFont(f);
+    inputBox->setFontFamily(f.family());
 }
 
 void ChatWindow::on_pushButtonClose_clicked()
@@ -158,31 +156,9 @@ void ChatWindow::on_pushButtonClose_clicked()
     this->close();
 }
 
-void ChatWindow::on_comboBoxFontSize_currentIndexChanged(const QString &arg1)
+void ChatWindow::on_comboBoxFontSize_currentIndexChanged(const QString &size)
 {
-    ui->textEditChatMsg->setFontPointSize(arg1.toDouble());
-}
-
-void ChatWindow::on_toolButtonBoldToo_clicked()
-{
-    isBold = !isBold;
-    if(isBold)
-    {
-        ui->textEditChatMsg->setFontWeight(QFont::Bold);
-    }
-    else
-    {
-        ui->textEditChatMsg->setFontWeight(QFont::Normal);
-    }
-
-    ui->toolButtonBoldToo->setDown(isBold);
-}
-
-void ChatWindow::on_toolButtonItalic_clicked()
-{
-    isItalic = !isItalic;
-    ui->textEditChatMsg->setFontItalic(isItalic);
-    ui->toolButtonItalic->setDown(isItalic);
+    inputBox->setFontPointSize(size.toDouble());
 }
 
 bool ChatWindow::establishMessageConnection(quint32 peerUID)
@@ -212,15 +188,15 @@ void ChatWindow::on_pushButtonSend_clicked()
                         + QDateTime::currentDateTime().toString("yyyy/MM/dd hh:mm:ss")));
     if(!inputBox->toPlainText().isEmpty())
     {
+        ui->textEditChatMsg->append(header);
+        ui->textEditChatMsg->append(text);
+        inputBox->clear();
         if(!establishMessageConnection(friendInfo.account))
         {
             QMessageBox::warning(this, "提示", "对方可能不在线，无法发送消息");
             return;
         }
         g_dataPool.sendMessage(friendInfo.account, text);
-        ui->textEditChatMsg->append(header);
-        ui->textEditChatMsg->append(text);
-        inputBox->clear();
     }
 }
 
@@ -242,4 +218,29 @@ void ChatWindow::newMessage(quint32 peerUID, QString msg)
                         + QDateTime::currentDateTime().toString("yyyy/MM/dd hh:mm:ss")));
     ui->textEditChatMsg->append(header);
     ui->textEditChatMsg->append(msg);
+}
+
+void ChatWindow::on_toolButtonBold_toggled(bool checked)
+{
+    if(checked)
+        inputBox->setFontWeight(QFont::Bold);
+    else
+        inputBox->setFontWeight(QFont::Normal);
+}
+
+void ChatWindow::on_toolButtonItalic_toggled(bool checked)
+{
+    inputBox->setFontItalic(checked);
+}
+
+void ChatWindow::closeEvent(QCloseEvent *e)
+{
+    inputBox->clear();
+    e->accept();
+}
+
+void ChatWindow::showEvent(QShowEvent *e)
+{
+    inputBox->setFocus();
+    e->accept();
 }

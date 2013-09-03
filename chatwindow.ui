@@ -104,7 +104,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QToolButton" name="toolButtonBoldToo">
+         <widget class="QToolButton" name="toolButtonBold">
           <property name="minimumSize">
            <size>
             <width>30</width>
@@ -120,6 +120,9 @@
           <property name="icon">
            <iconset resource="images/images.qrc">
             <normaloff>:/new/images/bold.png</normaloff>:/new/images/bold.png</iconset>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
           </property>
          </widget>
         </item>
@@ -141,25 +144,8 @@
            <iconset resource="images/images.qrc">
             <normaloff>:/new/images/italic.png</normaloff>:/new/images/italic.png</iconset>
           </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QToolButton" name="toolButtonRecord">
-          <property name="minimumSize">
-           <size>
-            <width>30</width>
-            <height>30</height>
-           </size>
-          </property>
-          <property name="toolTip">
-           <string>消息记录</string>
-          </property>
-          <property name="text">
-           <string>...</string>
-          </property>
-          <property name="icon">
-           <iconset resource="images/images.qrc">
-            <normaloff>:/new/images/save.png</normaloff>:/new/images/save.png</iconset>
+          <property name="checkable">
+           <bool>true</bool>
           </property>
          </widget>
         </item>

@@ -22,6 +22,8 @@ public:
 
 private:
     bool establishMessageConnection(quint32 peerUID);
+    void closeEvent(QCloseEvent *e);
+    void showEvent(QShowEvent *e);
 
 private slots:
     void newMessage(quint32 peerUID, QString msg);
@@ -29,10 +31,10 @@ private slots:
     void on_toolButtonClear_clicked();
     void on_fontComboBox_currentFontChanged(const QFont &f);
     void on_pushButtonClose_clicked();
-    void on_comboBoxFontSize_currentIndexChanged(const QString &arg1);
-    void on_toolButtonBoldToo_clicked();
-    void on_toolButtonItalic_clicked();
+    void on_comboBoxFontSize_currentIndexChanged(const QString &size);
     void on_pushButtonSend_clicked();
+    void on_toolButtonBold_toggled(bool checked);
+    void on_toolButtonItalic_toggled(bool checked);
 
 private:
     Ui::ChatWindow *ui;
@@ -40,8 +42,6 @@ private:
     static const int oneKB = 1024;
     static const int oneMB = 1024 * 1024;
     static  const int oneGB = 1024 * 1024 * 1024;
-    bool isBold;
-    bool isItalic;
     QString fileName;
     UserMessage me;
     FriendMessage friendInfo;
