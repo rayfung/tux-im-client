@@ -31,7 +31,7 @@ public:
 private:
     void setupMenu();
     int getSelectedRow();
-    ChatWindow *getChatWindow(FriendMessage info);
+    ChatWindow *getChatWindow(FriendProfile info);
     void closeEvent(QCloseEvent *e);
 
 private slots:
@@ -56,7 +56,7 @@ private:
     QAction *actionModifyFriendDisplayName;
     QAction *actionDeleteFriend;
     UserProfile profile;
-    QVector<FriendMessage> friendList;
+    QVector<FriendProfile> friendList;
     IMAPI api;
     QTimer timer;
     QSystemTrayIcon *trayIcon;

@@ -13,7 +13,7 @@ public:
     QString pwd;
 };
 
-class FriendMessage
+class FriendProfile
 {
 public:
     quint32 account;

@@ -60,10 +60,10 @@ bool IMAPI::login(QTcpSocket *tcpSocket, quint32 account, QString pwd,
     return true;
 }
 
-bool IMAPI::getUserList(QTcpSocket *tcpSocket, QVector<FriendMessage> &friendMessageList)
+bool IMAPI::getUserList(QTcpSocket *tcpSocket, QVector<FriendProfile> &friendList)
 {
     quint32         count;
-    FriendMessage   friendMessage;
+    FriendProfile   friendProfile;
     QByteArray      bytes;
     QByteArray      inBytes;
     QDataStream     out(&bytes, QIODevice::WriteOnly);
@@ -78,19 +78,19 @@ bool IMAPI::getUserList(QTcpSocket *tcpSocket, QVector<FriendMessage> &friendMes
     in >> count;
     for(quint32 i = 0; i < count; i++)
     {
-        in >> (friendMessage.account) >> (friendMessage.isOnLine) >> (friendMessage.nickName)
-           >> (friendMessage.displayName) >> (friendMessage.sex) >> (friendMessage.area);
-        friendMessageList.push_back(friendMessage);
+        in >> (friendProfile.account) >> (friendProfile.isOnLine) >> (friendProfile.nickName)
+           >> (friendProfile.displayName) >> (friendProfile.sex) >> (friendProfile.area);
+        friendList.push_back(friendProfile);
     }
 
     return true;
 }
 
 bool IMAPI::getUserProfile(QTcpSocket *tcpSocket, quint32 account,
-                             QVector<FriendMessage> &friendList)
+                             QVector<FriendProfile> &friendList)
 {
     quint32         count;
-    FriendMessage   friendMessage;
+    FriendProfile   friendMessage;
     QByteArray      bytes;
     QByteArray      inBytes;
     QDataStream     in(&inBytes, QIODevice::ReadOnly);

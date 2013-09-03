@@ -6,7 +6,7 @@
 
 extern DataPool g_dataPool;
 
-ChatWindow::ChatWindow(UserProfile me, FriendMessage friendInfo, QWidget *parent) :
+ChatWindow::ChatWindow(UserProfile me, FriendProfile friendInfo, QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::ChatWindow)
 {
@@ -44,7 +44,7 @@ void ChatWindow::setUserInfo(UserProfile info)
     me = info;
 }
 
-void ChatWindow::setFriendInfo(FriendMessage info)
+void ChatWindow::setFriendInfo(FriendProfile info)
 {
     friendInfo = info;
     if(friendInfo.displayName.isEmpty())

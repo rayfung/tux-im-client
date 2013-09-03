@@ -5,7 +5,7 @@
 #include <QInputDialog>
 #include <QMessageBox>
 
-UserInformation::UserInformation(FriendMessage profile, bool isFriend, QWidget *parent) :
+UserInformation::UserInformation(FriendProfile profile, bool isFriend, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::UserInformation),
     friendProfile(profile)

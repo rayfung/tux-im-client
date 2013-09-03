@@ -205,7 +205,7 @@ void Tux::on_findButton_clicked()
     uid = QInputDialog::getInt(NULL, "查询用户", "请输入用户账号：", 0, 0, 99887766, 1, &ok);
     if(ok)
     {
-        QVector<FriendMessage> list;
+        QVector<FriendProfile> list;
         if(api.getUserProfile(Utils::getInstance()->getTcpSocket(), uid, list))
         {
             if(list.size() > 0)
@@ -276,7 +276,7 @@ void Tux::showNewNickName(QString nickName)
 }
 
 /* 如果对应的窗口不存在，则新建一个窗口 */
-ChatWindow *Tux::getChatWindow(FriendMessage info)
+ChatWindow *Tux::getChatWindow(FriendProfile info)
 {
     quint32 uid = info.account;
 

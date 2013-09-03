@@ -13,7 +13,7 @@ class UserInformation : public QWidget
     Q_OBJECT
     
 public:
-    explicit UserInformation(FriendMessage profile, bool isFriend, QWidget *parent = 0);
+    explicit UserInformation(FriendProfile profile, bool isFriend, QWidget *parent = 0);
     ~UserInformation();
     
 private slots:
@@ -21,7 +21,7 @@ private slots:
 
 private:
     Ui::UserInformation *ui;
-    FriendMessage friendProfile;
+    FriendProfile friendProfile;
 
 signals:
     void newFriend();

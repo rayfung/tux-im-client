@@ -17,10 +17,10 @@ class ChatWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit ChatWindow(UserProfile me, FriendMessage friendInfo, QWidget *parent = 0);
+    explicit ChatWindow(UserProfile me, FriendProfile friendInfo, QWidget *parent = 0);
     ~ChatWindow();
     void setUserInfo(UserProfile info);
-    void setFriendInfo(FriendMessage info);
+    void setFriendInfo(FriendProfile info);
 
 private:
     bool establishConnection(enum Connection::ConnectionType type, QString path = QString());
@@ -48,7 +48,7 @@ private:
     static const int oneMB = 1024 * 1024;
     static  const int oneGB = 1024 * 1024 * 1024;
     UserProfile me;
-    FriendMessage friendInfo;
+    FriendProfile friendInfo;
     IMAPI api;
 };
 

@@ -19,9 +19,9 @@ public:
                       QString sex, QString area, quint32 &account);
     bool login(QTcpSocket *tcpSocket, quint32 account, QString pwd,
                QString ip, quint16 port, UserProfile &userProfile);
-    bool getUserList(QTcpSocket *tcpSocket, QVector<FriendMessage> &friendMessageList);
+    bool getUserList(QTcpSocket *tcpSocket, QVector<FriendProfile> &friendList);
     bool getUserProfile(QTcpSocket *tcpSocket, quint32 account,
-                        QVector<FriendMessage> &friendList);
+                        QVector<FriendProfile> &friendList);
     bool deleteFriend(QTcpSocket *tcpSocket, quint32 account);
     bool addFriend(QTcpSocket *tcpSocket, quint32 account, QString displayName);
     bool getIpAndPort(QTcpSocket *tcpSocket, quint32 account, AddrInfo &addr);
