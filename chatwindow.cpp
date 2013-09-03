@@ -2,6 +2,7 @@
 #include "ui_chatwindow.h"
 #include "utils.h"
 #include <QMessageBox>
+#include <QDateTime>
 
 extern DataPool g_dataPool;
 
@@ -12,6 +13,10 @@ ChatWindow::ChatWindow(UserMessage me, FriendMessage friendInfo, QWidget *parent
     friendInfo(friendInfo)
 {
     ui->setupUi(this);
+    inputBox = new InputBox();
+    connect(inputBox, SIGNAL(returnPressed()), this, SLOT(on_pushButtonSend_clicked()));
+    inputBox->setMaximumHeight(80);
+    ui->verticalLayoutInput->addWidget(inputBox);
 
     if(friendInfo.displayName.isEmpty())
         this->setWindowTitle(friendInfo.nickName);
@@ -140,16 +145,12 @@ void ChatWindow::on_pushButtonChooseFile_clicked()
 
 void ChatWindow::on_toolButtonClear_clicked()
 {
-    ui->plainTextEditChatMessage->setPlainText("");
-    ui->plainTextEditInput->setPlainText("");
-
+    ui->textEditChatMsg->setPlainText("");
 }
 
 void ChatWindow::on_fontComboBox_currentFontChanged(const QFont &f)
 {
-    ui->plainTextEditInput->setFont(f);
-    ui->plainTextEditChatMessage->setFont(f);
-    ui->plainTextEditInput->setFocus();
+    inputBox->setFont(f);
 }
 
 void ChatWindow::on_pushButtonClose_clicked()
@@ -159,41 +160,29 @@ void ChatWindow::on_pushButtonClose_clicked()
 
 void ChatWindow::on_comboBoxFontSize_currentIndexChanged(const QString &arg1)
 {
-    ui->plainTextEditInput->setFontPointSize(arg1.toDouble());
-    ui->plainTextEditChatMessage->setFontPointSize(arg1.toDouble());
-    ui->plainTextEditInput->setFocus();
-
+    ui->textEditChatMsg->setFontPointSize(arg1.toDouble());
 }
-
-
 
 void ChatWindow::on_toolButtonBoldToo_clicked()
 {
     isBold = !isBold;
     if(isBold)
     {
-        ui->plainTextEditInput->setFontWeight(QFont::Bold);
-        ui->plainTextEditChatMessage->setFontWeight(QFont::Bold);
+        ui->textEditChatMsg->setFontWeight(QFont::Bold);
     }
     else
     {
-        ui->plainTextEditInput->setFontWeight(QFont::Normal);
-        ui->plainTextEditChatMessage->setFontWeight(QFont::Normal);
+        ui->textEditChatMsg->setFontWeight(QFont::Normal);
     }
 
     ui->toolButtonBoldToo->setDown(isBold);
-    ui->plainTextEditInput->setFocus();
-
 }
 
 void ChatWindow::on_toolButtonItalic_clicked()
 {
     isItalic = !isItalic;
-    ui->plainTextEditInput->setFontItalic(isItalic);
-    ui->plainTextEditChatMessage->setFontItalic(isItalic);
+    ui->textEditChatMsg->setFontItalic(isItalic);
     ui->toolButtonItalic->setDown(isItalic);
-    ui->plainTextEditInput->setFocus();
-
 }
 
 bool ChatWindow::establishMessageConnection(quint32 peerUID)
@@ -207,7 +196,7 @@ bool ChatWindow::establishMessageConnection(quint32 peerUID)
         return false;
     socket = new QTcpSocket();
     socket->connectToHost(addr.ipAddr, addr.port);
-    if(!socket->waitForConnected())
+    if(!socket->waitForConnected(5000))
         return false;
     g_dataPool.setMessageConnection(socket, me.account, peerUID);
     return true;
@@ -215,23 +204,42 @@ bool ChatWindow::establishMessageConnection(quint32 peerUID)
 
 void ChatWindow::on_pushButtonSend_clicked()
 {
-    QString temp = ui->plainTextEditInput->toPlainText();
+    QString header;
+    QString text = inputBox->toHtml();
 
-    if(!temp.isEmpty())
+    header = QString("<span style='font-size:11pt; color:#0000ff;'>%1</span>");
+    header = header.arg(Qt::escape(me.name + " "
+                        + QDateTime::currentDateTime().toString("yyyy/MM/dd hh:mm:ss")));
+    if(!inputBox->toPlainText().isEmpty())
     {
         if(!establishMessageConnection(friendInfo.account))
         {
             QMessageBox::warning(this, "提示", "对方可能不在线，无法发送消息");
             return;
         }
-        g_dataPool.sendMessage(friendInfo.account, temp);
-        ui->plainTextEditChatMessage->append(temp);
-        ui->plainTextEditInput->setPlainText("");
+        g_dataPool.sendMessage(friendInfo.account, text);
+        ui->textEditChatMsg->append(header);
+        ui->textEditChatMsg->append(text);
+        inputBox->clear();
     }
 }
 
 void ChatWindow::newMessage(quint32 peerUID, QString msg)
 {
-    if(peerUID == friendInfo.account)
-        ui->plainTextEditChatMessage->append(msg);
+    if(peerUID != friendInfo.account)
+        return;
+
+    QString header;
+    QString name;
+
+    if(friendInfo.displayName.isEmpty())
+        name = friendInfo.nickName;
+    else
+        name = friendInfo.displayName;
+
+    header = QString("<span style='font-size:11pt; color:#00aa00;'>%1</span>");
+    header = header.arg(Qt::escape(name + " "
+                        + QDateTime::currentDateTime().toString("yyyy/MM/dd hh:mm:ss")));
+    ui->textEditChatMsg->append(header);
+    ui->textEditChatMsg->append(msg);
 }

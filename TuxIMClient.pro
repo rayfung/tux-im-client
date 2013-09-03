@@ -22,7 +22,8 @@ SOURCES += main.cpp\
     login.cpp \
     registration.cpp \
     utils.cpp \
-    personalcenter.cpp
+    personalcenter.cpp \
+    inputbox.cpp
 
 HEADERS  += \
     netsocket.h \
@@ -37,7 +38,8 @@ HEADERS  += \
     login.h \
     registration.h \
     utils.h \
-    personalcenter.h
+    personalcenter.h \
+    inputbox.h
 
 FORMS    += \
     userinformation.ui \

@@ -6,6 +6,7 @@
 #include "datatype.h"
 #include "network/datapool.h"
 #include "imapi.h"
+#include "inputbox.h"
 
 namespace Ui {
 class ChatWindow;
@@ -35,6 +36,7 @@ private slots:
 
 private:
     Ui::ChatWindow *ui;
+    InputBox *inputBox;
     static const int oneKB = 1024;
     static const int oneMB = 1024 * 1024;
     static  const int oneGB = 1024 * 1024 * 1024;
