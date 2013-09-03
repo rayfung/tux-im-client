@@ -167,6 +167,9 @@ p, li { white-space: pre-wrap; }
          <property name="text">
           <string>修改</string>
          </property>
+         <property name="autoDefault">
+          <bool>false</bool>
+         </property>
         </widget>
        </item>
        <item>
