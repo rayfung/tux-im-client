@@ -300,6 +300,8 @@ void Tux::on_listWidgetFriend_itemDoubleClicked(QListWidgetItem *item)
     if(index < 0)
         return;
     chat = getChatWindow(friendList.at(index));
+    chat->setUserInfo(profile);
+    chat->setFriendInfo(friendList.at(index));
     chat->show();
     chat->activateWindow();
 }
