@@ -316,7 +316,7 @@
                <item>
                 <widget class="QLabel" name="label_5">
                  <property name="text">
-                  <string>传输状态:</string>
+                  <string>状态:</string>
                  </property>
                 </widget>
                </item>
@@ -370,6 +370,20 @@
              <property name="icon">
               <iconset resource="images/images.qrc">
                <normaloff>:/new/images/color.png</normaloff>:/new/images/color.png</iconset>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="pushButtonAcceptFile">
+             <property name="text">
+              <string>接收文件</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="pushButtonRejectFile">
+             <property name="text">
+              <string>拒绝接收</string>
              </property>
             </widget>
            </item>

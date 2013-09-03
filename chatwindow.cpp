@@ -13,6 +13,8 @@ ChatWindow::ChatWindow(UserMessage me, FriendMessage friendInfo, QWidget *parent
     friendInfo(friendInfo)
 {
     ui->setupUi(this);
+    showButtons(true, false, false, false);
+
     inputBox = new InputBox();
     connect(inputBox, SIGNAL(returnPressed()), this, SLOT(on_pushButtonSend_clicked()));
     inputBox->setMaximumHeight(80);
@@ -23,10 +25,6 @@ ChatWindow::ChatWindow(UserMessage me, FriendMessage friendInfo, QWidget *parent
     else
         this->setWindowTitle(friendInfo.displayName + " (" + friendInfo.nickName + ")");
 
-    ui->pushButtonFileCancel->setEnabled(false);
-    ui->labelFileName->setText("空");
-    ui->labelFileSize->setText("0KB");
-    ui->labelFileState->setText("无传输");
     QString num;
     for(int i = 12; i <= 24; i+=2)
     {
@@ -36,6 +34,8 @@ ChatWindow::ChatWindow(UserMessage me, FriendMessage friendInfo, QWidget *parent
 
     connect(&g_dataPool, SIGNAL(newMessage(quint32,QString)),
             this, SLOT(newMessage(quint32,QString)));
+    connect(&g_dataPool, SIGNAL(fileRequest(quint32,QString,quint64)),
+            this, SLOT(fileRequest(quint32,QString,quint64)));
 }
 
 ChatWindow::~ChatWindow()
@@ -43,102 +43,72 @@ ChatWindow::~ChatWindow()
     delete ui;
 }
 
-void ChatWindow::on_pushButtonChooseFile_clicked()
+void ChatWindow::showButtons(bool chooseFile, bool cancel, bool accept, bool reject)
 {
-    QStringList FilePathList;
-    QString FilePath("");
-    QFile file;
-    QFileDialog fd(this);
-    fd.setFileMode(QFileDialog::ExistingFile);
-    fd.setViewMode(QFileDialog::List);
-    if(fd.exec())
-        FilePathList = fd.selectedFiles();
+    ui->pushButtonChooseFile->setVisible(chooseFile);
+    ui->pushButtonFileCancel->setVisible(cancel);
+    ui->pushButtonAcceptFile->setVisible(accept);
+    ui->pushButtonRejectFile->setVisible(reject);
+}
 
+void ChatWindow::fileRequest(quint32 peerUID, QString fileName, quint64 fileSize)
+{
+    if(peerUID != friendInfo.account)
+        return;
 
-    if(!FilePathList.isEmpty ())
+    ui->labelFileName->setText(fileName);
+    ui->labelFileSize->setText(getFileSizeAsString(fileSize));
+    ui->labelFileState->setText("对方向你发送文件");
+    showButtons(false, false, true, true);
+}
+
+QString ChatWindow::getFileSizeAsString(qint64 size)
+{
+    double d;
+    QString unit;
+
+    if(size < 1024)
     {
-
-
-         FilePath = FilePathList.at(0);
-
-         ui->pushButtonFileCancel->setEnabled(true);
-         file.setFileName(FilePath);
-         file.open(QIODevice::ReadOnly);
-         qint64 fileSize = file.size();
-         QString sfSize;
-
-
-
-         if(fileSize < oneKB)
-         {
-             sfSize.setNum(fileSize);
-             sfSize += "B";
-
-         }
-         else if(fileSize < oneMB)
-         {
-             fileSize /= oneKB;
-             sfSize.setNum(fileSize);
-             sfSize +="KB";
-         }
-         else if(fileSize < oneGB )
-         {
-             fileSize *= 100;
-             fileSize /= oneMB;
-             int temp = fileSize % 100;
-             QString stemp;
-             stemp.setNum(temp);
-             fileSize /= 100;
-
-             sfSize.setNum(fileSize);
-             sfSize += '.';
-             sfSize += stemp;
-             sfSize +="MB";
-         }
-         else
-         {
-             fileSize *= 100;
-             fileSize /= oneGB;
-             sfSize.setNum(fileSize);
-             int temp = fileSize % 100;
-             QString stemp;
-             stemp.setNum(temp);
-             fileSize /= 100;
-
-             sfSize.setNum(fileSize);
-             sfSize += '.';
-             sfSize += stemp;
-             sfSize +="GB";
-
-         }
-
-
-         ui->labelFileSize->setText(sfSize);
-         fileName = "";
-         int slen = FilePath.length() - 1;
-
-         while(slen >= 0)
-         {
-             if(FilePath[slen] == '/')
-                 break;
-             fileName.prepend(FilePath[slen]);
-             --slen;
-
-         }
-         ui->labelFileName->setText(fileName);
-
-
-
+        d = size;
+        unit = "B";
+    }
+    else if(size < 1024L * 1024L)
+    {
+        d = (double)size / 1024.0;
+        unit = "KB";
+    }
+    else if(size < 1024L * 1024L * 1024L)
+    {
+        d = (double)size / 1024.0 / 1024.0;
+        unit = "MB";
     }
     else
     {
-        ui->pushButtonFileCancel->setEnabled(false);
-        ui->labelFileName->setText("空");
-        ui->labelFileSize->setText("0KB");
-        ui->labelFileState->setText("无传输");
-
+        d = (double)size / 1024.0 / 1024.0 / 1024.0;
+        unit = "GB";
     }
+    return QString("%1 %2").arg(d, 0, 'f', 2).arg(unit);
+}
 
+void ChatWindow::on_pushButtonChooseFile_clicked()
+{
+    QString path;
+
+    path = QFileDialog::getOpenFileName(this, "选择文件");
+    if(path.isNull())
+        return;
+    QFileInfo info(path);
+
+    ui->labelFileName->setText(info.fileName());
+    ui->labelFileSize->setText(getFileSizeAsString(info.size()));
+    ui->labelFileState->setText("等待对方接收");
+    if(!establishConnection(Connection::file_connection, path))
+    {
+        QMessageBox::warning(this, "提示", "对方可能不在线，发送文件失败");
+        ui->labelFileState->setText("无传输");
+        return;
+    }
+    showButtons(false, true, false, false);
 }
 
 void ChatWindow::on_toolButtonClear_clicked()
@@ -161,20 +131,36 @@ void ChatWindow::on_comboBoxFontSize_currentIndexChanged(const QString &size)
     inputBox->setFontPointSize(size.toDouble());
 }
 
-bool ChatWindow::establishMessageConnection(quint32 peerUID)
+bool ChatWindow::establishConnection(enum Connection::ConnectionType type, QString path)
 {
     AddrMessage addr;
     QTcpSocket *socket;
 
-    if(g_dataPool.isConnected(friendInfo.account, Connection::message_connection))
+    if(g_dataPool.isConnected(friendInfo.account, type))
         return true;
-    if(!api.getIpAndPort(Utils::getInstance()->getTcpSocket(), peerUID, addr))
+    if(!api.getIpAndPort(Utils::getInstance()->getTcpSocket(), friendInfo.account, addr))
         return false;
     socket = new QTcpSocket();
     socket->connectToHost(addr.ipAddr, addr.port);
     if(!socket->waitForConnected(5000))
         return false;
-    g_dataPool.setMessageConnection(socket, me.account, peerUID);
+    switch(type)
+    {
+    case Connection::message_connection:
+        g_dataPool.setMessageConnection(socket, me.account, friendInfo.account);
+        break;
+
+    case Connection::file_connection:
+        g_dataPool.setFileConnection(socket, me.account, path, friendInfo.account);
+        break;
+
+    case Connection::audio_connection:
+        g_dataPool.setAudioConnection(socket, me.account, friendInfo.account);
+        break;
+
+    default:
+        break;
+    }
     return true;
 }
 
@@ -191,7 +177,7 @@ void ChatWindow::on_pushButtonSend_clicked()
         ui->textEditChatMsg->append(header);
         ui->textEditChatMsg->append(text);
         inputBox->clear();
-        if(!establishMessageConnection(friendInfo.account))
+        if(!establishConnection(Connection::message_connection))
         {
             QMessageBox::warning(this, "提示", "对方可能不在线，无法发送消息");
             return;
