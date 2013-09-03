@@ -1,9 +1,14 @@
 #include "chatwindow.h"
 #include "ui_chatwindow.h"
+#include "utils.h"
+#include <QMessageBox>
 
-ChatWindow::ChatWindow(FriendMessage friendInfo, QWidget *parent) :
+extern DataPool g_dataPool;
+
+ChatWindow::ChatWindow(UserMessage me, FriendMessage friendInfo, QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::ChatWindow),
+    me(me),
     friendInfo(friendInfo)
 {
     ui->setupUi(this);
@@ -25,6 +30,9 @@ ChatWindow::ChatWindow(FriendMessage friendInfo, QWidget *parent) :
     }
     isBold = false;
     isItalic = false;
+
+    connect(&g_dataPool, SIGNAL(newMessage(quint32,QString)),
+            this, SLOT(newMessage(quint32,QString)));
 }
 
 ChatWindow::~ChatWindow()
@@ -188,14 +196,42 @@ void ChatWindow::on_toolButtonItalic_clicked()
 
 }
 
+bool ChatWindow::establishMessageConnection(quint32 peerUID)
+{
+    AddrMessage addr;
+    QTcpSocket *socket;
+
+    if(g_dataPool.isConnected(friendInfo.account, Connection::message_connection))
+        return true;
+    if(!api.getIpAndPort(Utils::getInstance()->getTcpSocket(), peerUID, addr))
+        return false;
+    socket = new QTcpSocket();
+    socket->connectToHost(addr.ipAddr, addr.port);
+    if(!socket->waitForConnected())
+        return false;
+    g_dataPool.setMessageConnection(socket, me.account, peerUID);
+    return true;
+}
+
 void ChatWindow::on_pushButtonSend_clicked()
 {
     QString temp = ui->plainTextEditInput->toPlainText();
 
     if(!temp.isEmpty())
     {
-       ui->plainTextEditChatMessage->append(temp);
-       ui->plainTextEditInput->setPlainText("");
+        if(!establishMessageConnection(friendInfo.account))
+        {
+            QMessageBox::warning(this, "提示", "对方可能不在线，无法发送消息");
+            return;
+        }
+        g_dataPool.sendMessage(friendInfo.account, temp);
+        ui->plainTextEditChatMessage->append(temp);
+        ui->plainTextEditInput->setPlainText("");
     }
+}
 
+void ChatWindow::newMessage(quint32 peerUID, QString msg)
+{
+    if(peerUID == friendInfo.account)
+        ui->plainTextEditChatMessage->append(msg);
 }

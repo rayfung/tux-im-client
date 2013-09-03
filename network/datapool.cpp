@@ -216,6 +216,14 @@ void DataPool::cleanup()
     }
 }
 
+bool DataPool::isConnected(quint32 peerUID, Connection::ConnectionType type)
+{
+    if(findConnectionByUID(peerUID, type))
+        return true;
+    else
+        return false;
+}
+
 Connection *DataPool::findConnectionByUID(quint32 peerUID,
                                              enum Connection::ConnectionType type)
 {

@@ -4,6 +4,8 @@
 #include <QMainWindow>
 #include <QFileDialog>
 #include "datatype.h"
+#include "network/datapool.h"
+#include "imapi.h"
 
 namespace Ui {
 class ChatWindow;
@@ -14,10 +16,14 @@ class ChatWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit ChatWindow(FriendMessage friendInfo, QWidget *parent = 0);
+    explicit ChatWindow(UserMessage me, FriendMessage friendInfo, QWidget *parent = 0);
     ~ChatWindow();
 
+private:
+    bool establishMessageConnection(quint32 peerUID);
+
 private slots:
+    void newMessage(quint32 peerUID, QString msg);
     void on_pushButtonChooseFile_clicked();
     void on_toolButtonClear_clicked();
     void on_fontComboBox_currentFontChanged(const QFont &f);
@@ -35,7 +41,9 @@ private:
     bool isBold;
     bool isItalic;
     QString fileName;
+    UserMessage me;
     FriendMessage friendInfo;
+    IMAPI api;
 };
 
 #endif // CHATWINDOW_H

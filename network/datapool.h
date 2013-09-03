@@ -44,6 +44,8 @@ public:
     void setFileConnection(QTcpSocket *tcpSocket, quint32 uid, QString path, quint32 peerUID);
     void setAudioConnection(QTcpSocket *tcpSocket, quint32 uid, quint32 peerUID);
 
+    bool isConnected(quint32 peerUID, Connection::ConnectionType type);
+
     bool sendMessage(quint32 peerUID, QString msg);
     void finishSendMessage(quint32 peerUID);
     bool sendFileData(quint32 peerUID, QByteArray bytes);
