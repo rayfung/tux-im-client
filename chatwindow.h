@@ -17,9 +17,9 @@ class ChatWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit ChatWindow(UserMessage me, FriendMessage friendInfo, QWidget *parent = 0);
+    explicit ChatWindow(UserProfile me, FriendMessage friendInfo, QWidget *parent = 0);
     ~ChatWindow();
-    void setUserInfo(UserMessage info);
+    void setUserInfo(UserProfile info);
     void setFriendInfo(FriendMessage info);
 
 private:
@@ -47,7 +47,7 @@ private:
     static const int oneKB = 1024;
     static const int oneMB = 1024 * 1024;
     static  const int oneGB = 1024 * 1024 * 1024;
-    UserMessage me;
+    UserProfile me;
     FriendMessage friendInfo;
     IMAPI api;
 };

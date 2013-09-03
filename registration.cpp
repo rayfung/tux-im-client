@@ -11,12 +11,12 @@ Registration::Registration(QWidget *parent) :
 {
     ui->setupUi(this);
     this->setFixedSize(this->size());
-    userMessage = new UserMessage;
+    userProfile = new UserProfile;
 }
 
 Registration::~Registration()
 {
-    delete userMessage;
+    delete userProfile;
     delete ui;
 }
 
@@ -39,19 +39,19 @@ void Registration::on_registerPushButton_clicked()
         ui->pwdLineEdit->selectAll();
         return;
     }
-    this->userMessage->name = ui->nickNameLineEdit->text();
-    this->userMessage->pwd  = ui->pwdLineEdit->text();
-    this->userMessage->sex  = (ui->sexComboBox->currentIndex() ? "f" : "m");
-    this->userMessage->area = ui->areaLineEdit->text();
+    this->userProfile->name = ui->nickNameLineEdit->text();
+    this->userProfile->pwd  = ui->pwdLineEdit->text();
+    this->userProfile->sex  = (ui->sexComboBox->currentIndex() ? "f" : "m");
+    this->userProfile->area = ui->areaLineEdit->text();
     tcpSocket = Utils::getInstance()->getTcpSocket();
-    if(!imAPI.registration(tcpSocket, this->userMessage->pwd,
-                          this->userMessage->name, this->userMessage->sex,
-                          this->userMessage->area, this->userMessage->account))
+    if(!imAPI.registration(tcpSocket, this->userProfile->pwd,
+                          this->userProfile->name, this->userProfile->sex,
+                          this->userProfile->area, this->userProfile->account))
     {
         QMessageBox::information(this, "提示", "网络不稳定，请稍后再试!");
     } else {
         QMessageBox::information(this, "提示", QString("注册成功！\n你的账号是: %1")
-                                 .arg(this->userMessage->account));
+                                 .arg(this->userProfile->account));
     }
     this->close();
 }

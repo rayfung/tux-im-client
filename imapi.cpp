@@ -35,7 +35,7 @@ bool IMAPI::registration(QTcpSocket *tcpSocket, QString pwd, QString name, QStri
 }
 
 bool IMAPI::login(QTcpSocket *tcpSocket, quint32 account, QString pwd,
-                  QString ip, quint16 port, UserMessage &userMessage)
+                  QString ip, quint16 port, UserProfile &userProfile)
 {
     bool        flag;
     QByteArray  bytes;
@@ -55,7 +55,7 @@ bool IMAPI::login(QTcpSocket *tcpSocket, quint32 account, QString pwd,
     in >> flag;
     if(!flag)
         return false;
-    in >> (userMessage.name) >> (userMessage.sex) >> (userMessage.area);
+    in >> (userProfile.name) >> (userProfile.sex) >> (userProfile.area);
 
     return true;
 }

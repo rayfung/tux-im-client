@@ -23,7 +23,7 @@ private:
 
 private:
     Ui::Login *ui;
-    UserMessage    userMessage;
+    UserProfile userProfile;
 
 private slots:
     void on_registerPushButton_clicked();

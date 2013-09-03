@@ -6,7 +6,7 @@
 
 extern DataPool g_dataPool;
 
-ChatWindow::ChatWindow(UserMessage me, FriendMessage friendInfo, QWidget *parent) :
+ChatWindow::ChatWindow(UserProfile me, FriendMessage friendInfo, QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::ChatWindow)
 {
@@ -39,7 +39,7 @@ ChatWindow::~ChatWindow()
     delete ui;
 }
 
-void ChatWindow::setUserInfo(UserMessage info)
+void ChatWindow::setUserInfo(UserProfile info)
 {
     me = info;
 }

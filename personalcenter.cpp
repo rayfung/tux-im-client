@@ -6,19 +6,19 @@
 #include <QInputDialog>
 #include <QMessageBox>
 
-PersonalCenter::PersonalCenter(UserMessage userMessage, QWidget *parent) :
+PersonalCenter::PersonalCenter(UserProfile userProfile, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::PersonalCenter)
 {
     ui->setupUi(this);
     this->setFixedSize(this->size());
-    this->userMessage = userMessage;
+    this->userProfile = userProfile;
 
-    ui->labelNickName->setText(this->userMessage.name);
-    ui->lineEditNickName->setText(this->userMessage.name);
-    ui->lineEditAccount->setText(QString::number(this->userMessage.account));
-    ui->lineEditArea->setText(this->userMessage.area);
-    ui->comboBoxSex->setCurrentIndex(this->userMessage.sex == "m" ? 0 : 1);
+    ui->labelNickName->setText(this->userProfile.name);
+    ui->lineEditNickName->setText(this->userProfile.name);
+    ui->lineEditAccount->setText(QString::number(this->userProfile.account));
+    ui->lineEditArea->setText(this->userProfile.area);
+    ui->comboBoxSex->setCurrentIndex(this->userProfile.sex == "m" ? 0 : 1);
 }
 
 PersonalCenter::~PersonalCenter()

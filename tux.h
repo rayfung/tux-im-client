@@ -25,7 +25,7 @@ class Tux : public QWidget
     Q_OBJECT
     
 public:
-    explicit Tux(UserMessage userMessage, QWidget *parent = 0);
+    explicit Tux(UserProfile userProfile, QWidget *parent = 0);
     ~Tux();
 
 private:
@@ -55,7 +55,7 @@ private:
     QAction *actionShowFriendProfile;
     QAction *actionModifyFriendDisplayName;
     QAction *actionDeleteFriend;
-    UserMessage userMsg;
+    UserProfile profile;
     QVector<FriendMessage> friendList;
     IMAPI api;
     QTimer timer;

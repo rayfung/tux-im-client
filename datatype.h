@@ -9,7 +9,7 @@ typedef struct {
     QString  sex;
     QString area;
     QString pwd;
-} UserMessage;
+} UserProfile;
 
 typedef struct {
     quint32 account;

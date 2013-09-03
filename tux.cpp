@@ -6,14 +6,14 @@
 #include <QInputDialog>
 #include <QMessageBox>
 
-Tux::Tux(UserMessage userMessage, QWidget *parent) :
+Tux::Tux(UserProfile userProfile, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::Tux),
-    userMsg(userMessage)
+    profile(userProfile)
 {
     ui->setupUi(this);
 
-    ui->UserNameLabel->setText(userMsg.name);
+    ui->UserNameLabel->setText(profile.name);
 
     timer.setInterval(2 * 60 * 1000);
     refreshFriendList();
@@ -71,7 +71,7 @@ void Tux::refreshFriendList()
 
         ChatWindow *chat;
         chat = getChatWindow(friendList.at(i));
-        chat->setUserInfo(userMsg);
+        chat->setUserInfo(profile);
         chat->setFriendInfo(friendList.at(i));
     }
 }
@@ -103,7 +103,7 @@ void Tux::setupMenu()
     trayIcon = new QSystemTrayIcon(this);
     trayIcon->setIcon(QIcon(":/new/images/app.png"));
     trayIcon->setContextMenu(trayMenu);
-    trayIcon->setToolTip(userMsg.name);
+    trayIcon->setToolTip(profile.name);
     trayIcon->show();
     connect(trayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
             this, SLOT(trayIconActivated(QSystemTrayIcon::ActivationReason)));
@@ -262,7 +262,7 @@ move_selection:
 
 void Tux::on_pushButtonPersonal_clicked()
 {
-    PersonalCenter  *personalCenter = new PersonalCenter(userMsg);
+    PersonalCenter  *personalCenter = new PersonalCenter(profile);
 
     connect(personalCenter, SIGNAL(modifyMessage(QString)),
             this, SLOT(showNewNickName(QString)));
@@ -284,7 +284,7 @@ ChatWindow *Tux::getChatWindow(FriendMessage info)
     {
         ChatWindow *chat;
 
-        chat = new ChatWindow(userMsg, info);
+        chat = new ChatWindow(profile, info);
         chatWindowMap[uid] = chat;
     }
     return chatWindowMap[uid];

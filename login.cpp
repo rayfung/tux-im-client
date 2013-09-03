@@ -43,17 +43,17 @@ void Login::on_loginPushButton_clicked()
         return;
     }
 
-    this->userMessage.account = (quint32)ui->accountLineEdit->text().toUInt();
-    this->userMessage.pwd = ui->pwdLineEdit->text();
+    this->userProfile.account = (quint32)ui->accountLineEdit->text().toUInt();
+    this->userProfile.pwd = ui->pwdLineEdit->text();
     tcpSocket = Utils::getInstance()->getTcpSocket();
     if(!imAPI.login(tcpSocket, ui->accountLineEdit->text().toUInt(),
                     ui->pwdLineEdit->text(), g_server.getIp(), g_server.getPort(),
-                    this->userMessage))
+                    this->userProfile))
     {
         QMessageBox::information(this, "提示", "账号或密码错误!");
         return;
     }
-    tux = new Tux(this->userMessage);
+    tux = new Tux(this->userProfile);
     tux->show();
     this->hide();
 }

@@ -19,8 +19,7 @@ public:
 
 private:
     Ui::Registration *ui;
-
-    UserMessage *userMessage;
+    UserProfile *userProfile;
 
 private slots:
     void on_cancelPushButton_clicked();

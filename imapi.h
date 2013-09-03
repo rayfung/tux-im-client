@@ -18,7 +18,7 @@ public:
     bool registration(QTcpSocket *tcpSocket, QString pwd, QString name,
                       QString sex, QString area, quint32 &account);
     bool login(QTcpSocket *tcpSocket, quint32 account, QString pwd,
-               QString ip, quint16 port, UserMessage &userMessage);
+               QString ip, quint16 port, UserProfile &userProfile);
     bool getUserList(QTcpSocket *tcpSocket, QVector<FriendMessage> &friendMessageList);
     bool getUserProfile(QTcpSocket *tcpSocket, quint32 account,
                         QVector<FriendMessage> &friendList);
