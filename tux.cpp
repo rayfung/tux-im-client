@@ -12,6 +12,7 @@ Tux::Tux(UserMessage userMessage, QWidget *parent) :
     userMsg(userMessage)
 {
     ui->setupUi(this);
+
     ui->UserNameLabel->setText(userMsg.name);
 
     timer.setInterval(2 * 60 * 1000);
@@ -252,4 +253,32 @@ void Tux::on_pushButtonPersonal_clicked()
 void Tux::showNewNickName(QString nickName)
 {
     ui->UserNameLabel->setText(nickName);
+}
+
+/* 如果对应的窗口不存在，则新建一个窗口 */
+ChatWindow *Tux::getChatWindow(FriendMessage info)
+{
+    quint32 uid = info.account;
+
+    if(!chatWindowMap.contains(uid))
+    {
+        ChatWindow *chat;
+
+        chat = new ChatWindow(info, this);
+        chatWindowMap[uid] = chat;
+    }
+    return chatWindowMap[uid];
+}
+
+void Tux::on_listWidgetFriend_itemDoubleClicked(QListWidgetItem *item)
+{
+    ChatWindow *chat;
+    int index;
+
+    index = ui->listWidgetFriend->row(item);
+    if(index < 0)
+        return;
+    chat = getChatWindow(friendList.at(index));
+    chat->show();
+    chat->activateWindow();
 }

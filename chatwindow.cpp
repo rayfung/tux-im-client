@@ -1,13 +1,19 @@
 #include "chatwindow.h"
 #include "ui_chatwindow.h"
 
-ChatWindow::ChatWindow(QWidget *parent) :
+ChatWindow::ChatWindow(FriendMessage friendInfo, QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::ChatWindow)
+    ui(new Ui::ChatWindow),
+    friendInfo(friendInfo)
 {
     ui->setupUi(this);
-    ui->pushButtonFileCancel->setEnabled(false);
 
+    if(friendInfo.displayName.isEmpty())
+        this->setWindowTitle(friendInfo.nickName);
+    else
+        this->setWindowTitle(friendInfo.displayName + " (" + friendInfo.nickName + ")");
+
+    ui->pushButtonFileCancel->setEnabled(false);
     ui->labelFileName->setText("空");
     ui->labelFileSize->setText("0KB");
     ui->labelFileState->setText("无传输");
@@ -17,12 +23,8 @@ ChatWindow::ChatWindow(QWidget *parent) :
         num.setNum(i);
         ui->comboBoxFontSize->addItem(num);
     }
-
-
-
-   isBold = false;
-   isItalic = false;
-
+    isBold = false;
+    isItalic = false;
 }
 
 ChatWindow::~ChatWindow()

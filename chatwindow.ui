@@ -311,7 +311,7 @@
                <item>
                 <widget class="QLabel" name="labelFileName">
                  <property name="text">
-                  <string>TextLabel</string>
+                  <string>无</string>
                  </property>
                 </widget>
                </item>
@@ -329,7 +329,7 @@
                <item>
                 <widget class="QLabel" name="labelFileSize">
                  <property name="text">
-                  <string>TextLabel</string>
+                  <string>无</string>
                  </property>
                 </widget>
                </item>
@@ -347,7 +347,7 @@
                <item>
                 <widget class="QLabel" name="labelFileState">
                  <property name="text">
-                  <string>TextLabel</string>
+                  <string>无传输</string>
                  </property>
                 </widget>
                </item>
@@ -447,7 +447,7 @@
              <item>
               <widget class="QLabel" name="labelAudioState">
                <property name="text">
-                <string>TextLabel</string>
+                <string>无连接</string>
                </property>
               </widget>
              </item>
@@ -465,7 +465,7 @@
              <item>
               <widget class="QLabel" name="labelAudioTime">
                <property name="text">
-                <string>TextLabel</string>
+                <string>无</string>
                </property>
               </widget>
              </item>

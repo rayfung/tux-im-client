@@ -11,6 +11,7 @@ PersonalCenter::PersonalCenter(UserMessage userMessage, QWidget *parent) :
     ui(new Ui::PersonalCenter)
 {
     ui->setupUi(this);
+    this->setFixedSize(this->size());
     this->userMessage = userMessage;
 
     ui->labelNickName->setText(this->userMessage.name);

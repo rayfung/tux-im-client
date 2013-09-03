@@ -9,9 +9,12 @@
 #include <QTimer>
 #include <QSystemTrayIcon>
 #include <QCloseEvent>
+#include <QListWidgetItem>
+#include <QMap>
 
 #include "datatype.h"
 #include "imapi.h"
+#include "chatwindow.h"
 
 namespace Ui {
 class Tux;
@@ -28,6 +31,7 @@ public:
 private:
     void setupMenu();
     int getSelectedRow();
+    ChatWindow *getChatWindow(FriendMessage info);
     void closeEvent(QCloseEvent *e);
 
 private slots:
@@ -35,12 +39,13 @@ private slots:
     void popupMenu(QPoint point);
     void refreshFriendList();
     void askForQuit();
+    void showNewNickName(QString nickName);
     void actionShowProfileTriggered();
     void actionDeleteFriendTriggered();
     void actionModDisplayNameTriggered();
     void on_findButton_clicked();
     void on_lineEditSearch_textEdited(const QString &text);
-    void showNewNickName(QString nickName);
+    void on_listWidgetFriend_itemDoubleClicked(QListWidgetItem *item);
 
 private:
     Ui::Tux *ui;
@@ -57,6 +62,7 @@ private:
     QMenu *trayMenu;
     QAction *actionShowOrHide;
     QAction *actionQuit;
+    QMap<quint32, ChatWindow *> chatWindowMap;
 };
 
 #endif
