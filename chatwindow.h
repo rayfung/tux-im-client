@@ -19,6 +19,8 @@ class ChatWindow : public QMainWindow
 public:
     explicit ChatWindow(UserMessage me, FriendMessage friendInfo, QWidget *parent = 0);
     ~ChatWindow();
+    void setUserInfo(UserMessage info);
+    void setFriendInfo(FriendMessage info);
 
 private:
     bool establishConnection(enum Connection::ConnectionType type, QString path = QString());

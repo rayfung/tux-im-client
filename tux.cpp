@@ -68,7 +68,10 @@ void Tux::refreshFriendList()
         else
             ui->listWidgetFriend->item(i)->setTextColor(Qt::gray);
 
-        getChatWindow(friendList.at(i));
+        ChatWindow *chat;
+        chat = getChatWindow(friendList.at(i));
+        chat->setUserInfo(userMsg);
+        chat->setFriendInfo(friendList.at(i));
     }
 }
 

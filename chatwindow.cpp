@@ -8,22 +8,18 @@ extern DataPool g_dataPool;
 
 ChatWindow::ChatWindow(UserMessage me, FriendMessage friendInfo, QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::ChatWindow),
-    me(me),
-    friendInfo(friendInfo)
+    ui(new Ui::ChatWindow)
 {
     ui->setupUi(this);
     showButtons(true, false, false, false);
+
+    setUserInfo(me);
+    setFriendInfo(friendInfo);
 
     inputBox = new InputBox();
     connect(inputBox, SIGNAL(returnPressed()), this, SLOT(on_pushButtonSend_clicked()));
     inputBox->setMaximumHeight(80);
     ui->verticalLayoutInput->addWidget(inputBox);
-
-    if(friendInfo.displayName.isEmpty())
-        this->setWindowTitle(friendInfo.nickName);
-    else
-        this->setWindowTitle(friendInfo.displayName + " (" + friendInfo.nickName + ")");
 
     QString num;
     for(int i = 12; i <= 24; i+=2)
@@ -41,6 +37,20 @@ ChatWindow::ChatWindow(UserMessage me, FriendMessage friendInfo, QWidget *parent
 ChatWindow::~ChatWindow()
 {
     delete ui;
+}
+
+void ChatWindow::setUserInfo(UserMessage info)
+{
+    me = info;
+}
+
+void ChatWindow::setFriendInfo(FriendMessage info)
+{
+    friendInfo = info;
+    if(friendInfo.displayName.isEmpty())
+        this->setWindowTitle(friendInfo.nickName);
+    else
+        this->setWindowTitle(friendInfo.displayName + " (" + friendInfo.nickName + ")");
 }
 
 void ChatWindow::showButtons(bool chooseFile, bool cancel, bool accept, bool reject)
