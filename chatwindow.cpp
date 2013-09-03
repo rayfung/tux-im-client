@@ -128,7 +128,12 @@ void ChatWindow::on_toolButtonClear_clicked()
 
 void ChatWindow::on_fontComboBox_currentFontChanged(const QFont &f)
 {
-    inputBox->setFontFamily(f.family());
+    QFont font;
+
+    font = inputBox->font();
+    font.setFamily(f.family());
+    inputBox->setFont(font);
+    inputBox->setFocus();
 }
 
 void ChatWindow::on_pushButtonClose_clicked()
@@ -138,7 +143,12 @@ void ChatWindow::on_pushButtonClose_clicked()
 
 void ChatWindow::on_comboBoxFontSize_currentIndexChanged(const QString &size)
 {
-    inputBox->setFontPointSize(size.toDouble());
+    QFont font;
+
+    font = inputBox->font();
+    font.setPointSize(size.toInt());
+    inputBox->setFont(font);
+    inputBox->setFocus();
 }
 
 bool ChatWindow::establishConnection(enum Connection::ConnectionType type, QString path)
@@ -218,15 +228,22 @@ void ChatWindow::newMessage(quint32 peerUID, QString msg)
 
 void ChatWindow::on_toolButtonBold_toggled(bool checked)
 {
-    if(checked)
-        inputBox->setFontWeight(QFont::Bold);
-    else
-        inputBox->setFontWeight(QFont::Normal);
+    QFont font;
+
+    font = inputBox->font();
+    font.setBold(checked);
+    inputBox->setFont(font);
+    inputBox->setFocus();
 }
 
 void ChatWindow::on_toolButtonItalic_toggled(bool checked)
 {
-    inputBox->setFontItalic(checked);
+    QFont font;
+
+    font = inputBox->font();
+    font.setItalic(checked);
+    inputBox->setFont(font);
+    inputBox->setFocus();
 }
 
 void ChatWindow::closeEvent(QCloseEvent *e)
