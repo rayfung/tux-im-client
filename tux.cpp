@@ -44,6 +44,7 @@ void Tux::askForQuit()
                              QMessageBox::Cancel)
             == QMessageBox::Ok)
     {
+        Utils::getInstance()->getTcpSocket()->close();
         QTimer::singleShot(0, qApp, SLOT(quit()));
     }
 }
