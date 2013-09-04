@@ -129,6 +129,8 @@ void ChatWindow::connectionAborted(quint32 peerUID, Connection::ConnectionType t
         showAudioButtons(true, false, false, false);
         ui->labelAudioState->setText("已结束");
         ui->labelAudioTime->setText("");
+        audioInput->stop();
+        audioOutput->stop();
         DeviceManager::getInstance()->releaseDevice(friendInfo.account);
         break;
 
