@@ -5,6 +5,7 @@
 #include <QFileDialog>
 #include <QFile>
 #include <QTimer>
+#include <QTime>
 #include <QAudioInput>
 #include <QAudioOutput>
 #include <QAudioFormat>
@@ -91,6 +92,7 @@ private:
     QAudioOutput *audioOutput;
     QIODevice *inDevice;
     QIODevice *outDevice;
+    QTime audioTime;
 };
 
 #endif // CHATWINDOW_H

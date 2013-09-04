@@ -134,7 +134,7 @@ void ChatWindow::connectionAborted(quint32 peerUID, Connection::ConnectionType t
     case Connection::audio_connection:
         showAudioButtons(true, false, false, false);
         ui->labelAudioState->setText("已结束");
-        ui->labelAudioTime->setText("");
+        ui->labelAudioTime->setText("无");
         if(audioInput)
             audioInput->stop();
         if(audioOutput)
@@ -483,7 +483,6 @@ void ChatWindow::on_pushButtonAudioStart_clicked()
     }
     showAudioButtons(false, true, false, false);
     ui->labelAudioState->setText("等待对方接受");
-    ui->labelAudioTime->setText("00:00:00");
 }
 
 void ChatWindow::audioRequestResult(quint32 peerUID, bool accepted)
@@ -495,7 +494,7 @@ void ChatWindow::audioRequestResult(quint32 peerUID, bool accepted)
     {
         showAudioButtons(false, true, false, false);
         ui->labelAudioState->setText("通话中");
-        ui->labelAudioTime->setText("00:00:00");
+        audioTime.start();
         setupAudioIO();
     }
     else
@@ -513,14 +512,13 @@ void ChatWindow::audioRequest(quint32 peerUID)
 
     showAudioButtons(false, false, true, true);
     ui->labelAudioState->setText("对方请求语音通话");
-    ui->labelAudioTime->setText("00:00:00");
 }
 
 void ChatWindow::on_pushButtonAudioReject_clicked()
 {
     showAudioButtons(true, false, false, false);
     ui->labelAudioState->setText("无连接");
-    ui->labelAudioTime->setText("");
+    ui->labelAudioTime->setText("无");
     g_dataPool.sendAudioRequestResult(friendInfo.account, false);
 }
 
@@ -532,6 +530,8 @@ void ChatWindow::on_pushButtonAudioAccept_clicked()
         this->on_pushButtonAudioReject_clicked();
         return;
     }
+
+    audioTime.start();
     showAudioButtons(false, true, false, false);
     ui->labelAudioState->setText("通话中");
     g_dataPool.sendAudioRequestResult(friendInfo.account, true);
@@ -555,6 +555,10 @@ void ChatWindow::setupAudioIO()
 
 void ChatWindow::inDeviceReadyRead()
 {
+    QTime time(0, 0, 0);
+
+    time = time.addMSecs(audioTime.elapsed());
+    ui->labelAudioTime->setText(time.toString("hh:mm:ss"));
     g_dataPool.sendAudioData(friendInfo.account, inDevice->readAll());
 }
 
