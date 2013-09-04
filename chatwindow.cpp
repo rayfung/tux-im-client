@@ -19,7 +19,7 @@ ChatWindow::ChatWindow(UserProfile me, FriendProfile friendInfo, QWidget *parent
 
     inputBox = new InputBox();
     connect(inputBox, SIGNAL(returnPressed()), this, SLOT(on_pushButtonSend_clicked()));
-    inputBox->setMaximumHeight(80);
+    inputBox->setMaximumHeight(100);
     ui->verticalLayoutInput->addWidget(inputBox);
 
     QString num;
@@ -200,8 +200,9 @@ void ChatWindow::on_pushButtonChooseFile_clicked()
     ui->labelFileState->setText("等待对方接收");
     if(!establishConnection(Connection::file_connection, path))
     {
+        sendingFile.close();
         QMessageBox::warning(this, "提示", "对方可能不在线，发送文件失败");
-        ui->labelFileState->setText("无传输");
+        ui->labelFileState->setText("已取消");
         return;
     }
     showButtons(false, true, false, false);
