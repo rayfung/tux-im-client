@@ -465,6 +465,7 @@ void ChatWindow::on_pushButtonAudioStart_clicked()
     }
     if(!establishConnection(Connection::audio_connection))
     {
+        DeviceManager::getInstance()->releaseDevice(friendInfo.account);
         QMessageBox::information(this, "提示", "对方可能不在线，无法发起语音通话");
         return;
     }
