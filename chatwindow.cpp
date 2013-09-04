@@ -13,6 +13,12 @@ ChatWindow::ChatWindow(UserProfile me, FriendProfile friendInfo, QWidget *parent
     fileState(StateFileAborted)
 {
     ui->setupUi(this);
+
+    audioInput = NULL;
+    audioOutput = NULL;
+    inDevice = NULL;
+    outDevice = NULL;
+
     showButtons(true, false, false, false);
     showAudioButtons(true, false, false, false);
     ui->progressBarFile->setVisible(false);
@@ -129,9 +135,15 @@ void ChatWindow::connectionAborted(quint32 peerUID, Connection::ConnectionType t
         showAudioButtons(true, false, false, false);
         ui->labelAudioState->setText("已结束");
         ui->labelAudioTime->setText("");
-        audioInput->stop();
-        audioOutput->stop();
+        if(audioInput)
+            audioInput->stop();
+        if(audioOutput)
+            audioOutput->stop();
         DeviceManager::getInstance()->releaseDevice(friendInfo.account);
+        audioInput = NULL;
+        audioOutput = NULL;
+        inDevice = NULL;
+        outDevice = NULL;
         break;
 
     default:
