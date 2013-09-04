@@ -494,7 +494,7 @@ void ChatWindow::audioRequestResult(quint32 peerUID, bool accepted)
     if(accepted)
     {
         showAudioButtons(false, true, false, false);
-        ui->labelAudioState->setText("语音通话中");
+        ui->labelAudioState->setText("通话中");
         ui->labelAudioTime->setText("00:00:00");
         setupAudioIO();
     }
@@ -533,6 +533,7 @@ void ChatWindow::on_pushButtonAudioAccept_clicked()
         return;
     }
     showAudioButtons(false, true, false, false);
+    ui->labelAudioState->setText("通话中");
     g_dataPool.sendAudioRequestResult(friendInfo.account, true);
     setupAudioIO();
 }
