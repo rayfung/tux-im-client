@@ -1,6 +1,7 @@
 #include "chatwindow.h"
 #include "ui_chatwindow.h"
 #include "utils.h"
+#include "devicemanager.h"
 #include <QMessageBox>
 #include <QDateTime>
 
@@ -13,6 +14,7 @@ ChatWindow::ChatWindow(UserProfile me, FriendProfile friendInfo, QWidget *parent
 {
     ui->setupUi(this);
     showButtons(true, false, false, false);
+    showAudioButtons(true, false, false, false);
     ui->progressBarFile->setVisible(false);
 
     setUserInfo(me);
@@ -43,6 +45,11 @@ ChatWindow::ChatWindow(UserProfile me, FriendProfile friendInfo, QWidget *parent
     connect(&g_dataPool, SIGNAL(fileReceived(quint32)),
             this, SLOT(fileReceived(quint32)));
     connect(&fileSendingTimer, SIGNAL(timeout()), this, SLOT(fileSendData()));
+    connect(&g_dataPool, SIGNAL(audioRequestResult(quint32,bool)),
+            this, SLOT(audioRequestResult(quint32,bool)));
+    connect(&g_dataPool, SIGNAL(audioRequest(quint32)), this, SLOT(audioRequest(quint32)));
+    connect(&g_dataPool, SIGNAL(audioDataReady(quint32,QByteArray)),
+            this, SLOT(audioDataReady(quint32,QByteArray)));
 }
 
 ChatWindow::~ChatWindow()
@@ -119,6 +126,10 @@ void ChatWindow::connectionAborted(quint32 peerUID, Connection::ConnectionType t
         break;
 
     case Connection::audio_connection:
+        showAudioButtons(true, false, false, false);
+        ui->labelAudioState->setText("已结束");
+        ui->labelAudioTime->setText("");
+        DeviceManager::getInstance()->releaseDevice(friendInfo.account);
         break;
 
     default:
@@ -433,4 +444,106 @@ void ChatWindow::fileDataReady(quint32 peerUID, QByteArray data)
     else
         percentage = 1.0;
     ui->progressBarFile->setValue(percentage * 100.0);
+}
+
+void ChatWindow::showAudioButtons(bool start, bool cancel, bool accept, bool reject)
+{
+    ui->pushButtonAudioStart->setVisible(start);
+    ui->pushButtonAudioEnd->setVisible(cancel);
+    ui->pushButtonAudioAccept->setVisible(accept);
+    ui->pushButtonAudioReject->setVisible(reject);
+}
+
+void ChatWindow::on_pushButtonAudioStart_clicked()
+{
+    if(!DeviceManager::getInstance()->getDevice(friendInfo.account, &audioInput, &audioOutput))
+    {
+        QMessageBox::information(this, "提示", "音频设备已被其它会话占用");
+        return;
+    }
+    if(!establishConnection(Connection::audio_connection))
+    {
+        QMessageBox::information(this, "提示", "对方可能不在线，无法发起语音通话");
+        return;
+    }
+    showAudioButtons(false, true, false, false);
+    ui->labelAudioState->setText("等待对方接受");
+    ui->labelAudioTime->setText("00:00:00");
+}
+
+void ChatWindow::audioRequestResult(quint32 peerUID, bool accepted)
+{
+    if(peerUID != friendInfo.account)
+        return;
+
+    if(accepted)
+    {
+        showAudioButtons(false, true, false, false);
+        ui->labelAudioState->setText("语音通话中");
+        ui->labelAudioTime->setText("00:00:00");
+        setupAudioIO();
+    }
+    else
+    {
+        DeviceManager::getInstance()->releaseDevice(friendInfo.account);
+        showAudioButtons(true, false, false, false);
+        g_dataPool.finishSendAudio(peerUID);
+    }
+}
+
+void ChatWindow::audioRequest(quint32 peerUID)
+{
+    if(peerUID != friendInfo.account)
+        return;
+
+    showAudioButtons(false, false, true, true);
+    ui->labelAudioState->setText("对方请求语音通话");
+    ui->labelAudioTime->setText("00:00:00");
+}
+
+void ChatWindow::on_pushButtonAudioReject_clicked()
+{
+    showAudioButtons(true, false, false, false);
+    ui->labelAudioState->setText("无连接");
+    ui->labelAudioTime->setText("");
+    g_dataPool.sendAudioRequestResult(friendInfo.account, false);
+}
+
+void ChatWindow::on_pushButtonAudioAccept_clicked()
+{
+    if(!DeviceManager::getInstance()->getDevice(friendInfo.account, &audioInput, &audioOutput))
+    {
+        QMessageBox::information(this, "提示", "音频设备已被其它会话占用");
+        this->on_pushButtonAudioReject_clicked();
+        return;
+    }
+    showAudioButtons(false, true, false, false);
+    g_dataPool.sendAudioRequestResult(friendInfo.account, true);
+    setupAudioIO();
+}
+
+void ChatWindow::audioDataReady(quint32 peerUID, QByteArray data)
+{
+    if(peerUID != friendInfo.account)
+        return;
+
+    outDevice->write(data);
+}
+
+void ChatWindow::setupAudioIO()
+{
+    inDevice = audioInput->start();
+    outDevice = audioOutput->start();
+    connect(inDevice, SIGNAL(readyRead()), this, SLOT(inDeviceReadyRead()));
+}
+
+void ChatWindow::inDeviceReadyRead()
+{
+    g_dataPool.sendAudioData(friendInfo.account, inDevice->readAll());
+}
+
+void ChatWindow::on_pushButtonAudioEnd_clicked()
+{
+    showAudioButtons(true, false, false, false);
+    g_dataPool.finishSendAudio(friendInfo.account);
 }

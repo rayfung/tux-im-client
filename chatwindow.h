@@ -5,6 +5,10 @@
 #include <QFileDialog>
 #include <QFile>
 #include <QTimer>
+#include <QAudioInput>
+#include <QAudioOutput>
+#include <QAudioFormat>
+#include <QAudioDeviceInfo>
 #include "datatype.h"
 #include "network/datapool.h"
 #include "imapi.h"
@@ -27,6 +31,8 @@ public:
 private:
     bool establishConnection(enum Connection::ConnectionType type, QString path = QString());
     void showButtons(bool chooseFile, bool cancel, bool accept, bool reject);
+    void showAudioButtons(bool start, bool cancel, bool accept, bool reject);
+    void setupAudioIO();
     QString getFileSizeAsString(qint64 size);
     void closeEvent(QCloseEvent *e);
     void showEvent(QShowEvent *e);
@@ -39,6 +45,10 @@ private slots:
     void fileDataReady(quint32 peerUID, QByteArray data);
     void fileReceived(quint32 peerUID);
     void fileSendData();
+    void audioRequestResult(quint32 peerUID, bool accepted);
+    void audioRequest(quint32 peerUID);
+    void audioDataReady(quint32 peerUID, QByteArray data);
+    void inDeviceReadyRead();
 
     void on_pushButtonChooseFile_clicked();
     void on_toolButtonClear_clicked();
@@ -51,6 +61,10 @@ private slots:
     void on_pushButtonFileCancel_clicked();
     void on_pushButtonRejectFile_clicked();
     void on_pushButtonAcceptFile_clicked();
+    void on_pushButtonAudioStart_clicked();
+    void on_pushButtonAudioReject_clicked();
+    void on_pushButtonAudioAccept_clicked();
+    void on_pushButtonAudioEnd_clicked();
 
 private:
     Ui::ChatWindow *ui;
@@ -73,6 +87,10 @@ private:
         StateFileRejected
     }fileState;
     quint64 receiveFileSize;
+    QAudioInput *audioInput;
+    QAudioOutput *audioOutput;
+    QIODevice *inDevice;
+    QIODevice *outDevice;
 };
 
 #endif // CHATWINDOW_H

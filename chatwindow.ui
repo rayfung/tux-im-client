@@ -456,27 +456,44 @@
             </layout>
            </item>
            <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_7">
-             <item>
-              <widget class="QPushButton" name="pushButtonAudioStart">
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>30</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>250</width>
-                 <height>16777215</height>
-                </size>
-               </property>
-               <property name="text">
-                <string>开始</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
+            <widget class="QPushButton" name="pushButtonAudioStart">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>30</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>250</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>开始</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="pushButtonAudioEnd">
+             <property name="text">
+              <string>结束</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="pushButtonAudioAccept">
+             <property name="text">
+              <string>接受</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="pushButtonAudioReject">
+             <property name="text">
+              <string>拒绝</string>
+             </property>
+            </widget>
            </item>
           </layout>
          </item>

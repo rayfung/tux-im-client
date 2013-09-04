@@ -6,6 +6,14 @@
 
 QT       += core gui network
 
+ubuntu {
+    LIBS        += -lQtMultimediaKit
+    INCLUDEPATH += /usr/include/QtMobility
+    INCLUDEPATH += /usr/include/QtMultimediaKit
+} else {
+    QT          += multimedia
+}
+
 TARGET = TuxIMClient
 TEMPLATE = app
 
@@ -23,7 +31,8 @@ SOURCES += main.cpp\
     registration.cpp \
     utils.cpp \
     personalcenter.cpp \
-    inputbox.cpp
+    inputbox.cpp \
+    devicemanager.cpp
 
 HEADERS  += \
     netsocket.h \
@@ -39,7 +48,8 @@ HEADERS  += \
     registration.h \
     utils.h \
     personalcenter.h \
-    inputbox.h
+    inputbox.h \
+    devicemanager.h
 
 FORMS    += \
     userinformation.ui \
