@@ -393,7 +393,7 @@ void DataPool::abortSendFile(quint32 peerUID)
     if(connection == NULL)
         return;
     connection->state = Connection::state_close;
-    connection->tcpSocket->close();
+    connection->tcpSocket->abort();
 }
 
 bool DataPool::sendAudioData(quint32 peerUID, QByteArray bytes)
