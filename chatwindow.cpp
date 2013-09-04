@@ -57,7 +57,6 @@ void ChatWindow::fileSendData()
         g_dataPool.finishSendFile(friendInfo.account);
         fileSendingTimer.stop();
         sendingFile.close();
-        ui->labelFileState->setText("发送完毕");
         showButtons(true, false, false, false);
         return;
     }
@@ -84,6 +83,7 @@ void ChatWindow::connectionAborted(quint32 peerUID, Connection::ConnectionType t
         break;
 
     case Connection::file_connection:
+        fileSendingTimer.stop();
         sendingFile.close();
         receivedFile.close();
         switch(fileState)
