@@ -357,7 +357,6 @@ void ChatWindow::on_pushButtonRejectFile_clicked()
     ui->labelFileState->setText("已拒绝接收");
     showButtons(true, false, false, false);
     g_dataPool.sendFileRequestResult(friendInfo.account, false);
-    g_dataPool.abortSendFile(friendInfo.account);
 }
 
 void ChatWindow::fileRequestResult(quint32 peerUID, bool accepted)
@@ -377,6 +376,7 @@ void ChatWindow::fileRequestResult(quint32 peerUID, bool accepted)
         fileState = StateFileRejected;
         ui->labelFileState->setText("对方拒绝接收文件");
         showButtons(true, false, false, false);
+        g_dataPool.abortSendFile(friendInfo.account);
         QMessageBox::information(this, "提示", QString("%1 拒绝接收").arg(friendInfo.nickName));
     }
 }
