@@ -13,6 +13,7 @@ ChatWindow::ChatWindow(UserProfile me, FriendProfile friendInfo, QWidget *parent
 {
     ui->setupUi(this);
     showButtons(true, false, false, false);
+    ui->progressBarFile->setVisible(false);
 
     setUserInfo(me);
     setFriendInfo(friendInfo);
@@ -60,7 +61,13 @@ void ChatWindow::fileSendData()
         showButtons(true, false, false, false);
         return;
     }
+    double percentage;
     g_dataPool.sendFileData(friendInfo.account, sendingFile.read(1024L * 1024L));
+    if(sendingFile.size() > 0)
+        percentage = (double)sendingFile.pos() / (double)sendingFile.size();
+    else
+        percentage = 1.0;
+    ui->progressBarFile->setValue(percentage * 100.0);
 }
 
 void ChatWindow::fileReceived(quint32 peerUID)
@@ -86,6 +93,7 @@ void ChatWindow::connectionAborted(quint32 peerUID, Connection::ConnectionType t
         fileSendingTimer.stop();
         sendingFile.close();
         receivedFile.close();
+        ui->progressBarFile->setVisible(false);
         switch(fileState)
         {
         case StateFileAborted:
@@ -144,6 +152,7 @@ void ChatWindow::fileRequest(quint32 peerUID, QString fileName, quint64 fileSize
         return;
 
     this->fileName = fileName;
+    this->receiveFileSize = fileSize;
     ui->labelFileName->setText(fileName);
     ui->labelFileSize->setText(getFileSizeAsString(fileSize));
     ui->labelFileState->setText("对方发送文件");
@@ -368,6 +377,8 @@ void ChatWindow::fileRequestResult(quint32 peerUID, bool accepted)
     {
         ui->labelFileState->setText("传输中");
         showButtons(false, true, false, false);
+        ui->progressBarFile->setValue(0);
+        ui->progressBarFile->setVisible(true);
         fileSendingTimer.setInterval(1000);
         fileSendingTimer.start();
     }
@@ -400,6 +411,8 @@ void ChatWindow::on_pushButtonAcceptFile_clicked()
     }
     ui->labelFileState->setText("传输中");
     showButtons(false, true, false, false);
+    ui->progressBarFile->setValue(0);
+    ui->progressBarFile->setVisible(true);
     g_dataPool.sendFileRequestResult(friendInfo.account, true);
 }
 
@@ -410,4 +423,12 @@ void ChatWindow::fileDataReady(quint32 peerUID, QByteArray data)
 
     receivedFile.write(data);
     receivedFile.flush();
+
+    double percentage;
+
+    if(this->receiveFileSize > 0)
+        percentage = (double)receivedFile.pos() / (double)this->receiveFileSize;
+    else
+        percentage = 1.0;
+    ui->progressBarFile->setValue(percentage * 100.0);
 }

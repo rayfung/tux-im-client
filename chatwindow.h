@@ -72,6 +72,7 @@ private:
         StateFileAborted,
         StateFileRejected
     }fileState;
+    quint64 receiveFileSize;
 };
 
 #endif // CHATWINDOW_H

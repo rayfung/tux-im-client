@@ -312,6 +312,19 @@
             </layout>
            </item>
            <item>
+            <widget class="QProgressBar" name="progressBarFile">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="value">
+              <number>24</number>
+             </property>
+            </widget>
+           </item>
+           <item>
             <widget class="QPushButton" name="pushButtonChooseFile">
              <property name="minimumSize">
               <size>
