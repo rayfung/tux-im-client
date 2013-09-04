@@ -3,8 +3,11 @@
 #include "userinformation.h"
 #include "utils.h"
 #include "personalcenter.h"
+#include "network/datapool.h"
 #include <QInputDialog>
 #include <QMessageBox>
+
+extern DataPool g_dataPool;
 
 Tux::Tux(UserProfile userProfile, QWidget *parent) :
     QWidget(parent),
@@ -21,6 +24,8 @@ Tux::Tux(UserProfile userProfile, QWidget *parent) :
     connect(ui->listWidgetFriend, SIGNAL(customContextMenuRequested(QPoint)),
             this, SLOT(popupMenu(QPoint)));
     connect(&timer, SIGNAL(timeout()), this, SLOT(refreshFriendList()));
+    connect(&g_dataPool, SIGNAL(newMessage(quint32,QString)),
+            this, SLOT(newMessage(quint32,QString)));
 
     //timer.start();
 }
@@ -304,4 +309,25 @@ void Tux::on_listWidgetFriend_itemDoubleClicked(QListWidgetItem *item)
     chat->setFriendInfo(friendList.at(index));
     chat->show();
     chat->activateWindow();
+}
+
+void Tux::newMessage(quint32 peerUID, QString msg)
+{
+    for(int i = 0; i < friendList.size(); ++i)
+    {
+        if(peerUID == friendList.at(i).account)
+        {
+            ChatWindow *chat;
+
+            chat = getChatWindow(friendList.at(i));
+            if(!chat->isVisible())
+            {
+                trayIcon->showMessage("新消息", QString("%1 发了新消息给你")
+                                      .arg(friendList.at(i).nickName));
+                chat->showMinimized();
+                chat->activateWindow();
+            }
+            return;
+        }
+    }
 }

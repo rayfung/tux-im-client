@@ -47,6 +47,7 @@ private slots:
     void on_lineEditSearch_textEdited(const QString &text);
     void on_listWidgetFriend_itemDoubleClicked(QListWidgetItem *item);
     void trayIconActivated(QSystemTrayIcon::ActivationReason reason);
+    void newMessage(quint32 peerUID, QString msg);
 
 private:
     Ui::Tux *ui;
