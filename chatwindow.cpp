@@ -113,6 +113,8 @@ void ChatWindow::connectionAborted(quint32 peerUID, Connection::ConnectionType t
             break;
         }
         showButtons(true, false, false, false);
+        ui->labelFileName->setText("无");
+        ui->labelFileSize->setText("无");
         fileState = StateFileAborted;
         break;
 
