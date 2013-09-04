@@ -3,6 +3,8 @@
 
 #include <QMainWindow>
 #include <QFileDialog>
+#include <QFile>
+#include <QTimer>
 #include "datatype.h"
 #include "network/datapool.h"
 #include "imapi.h"
@@ -34,6 +36,10 @@ private slots:
     void fileRequest(quint32 peerUID, QString fileName, quint64 fileSize);
     void fileRequestResult(quint32 peerUID, bool accepted);
     void connectionAborted(quint32 peerUID, Connection::ConnectionType type);
+    void fileDataReady(quint32 peerUID, QByteArray data);
+    void fileReceived(quint32 peerUID);
+    void fileSendData();
+
     void on_pushButtonChooseFile_clicked();
     void on_toolButtonClear_clicked();
     void on_fontComboBox_currentFontChanged(const QFont &f);
@@ -44,6 +50,7 @@ private slots:
     void on_toolButtonItalic_toggled(bool checked);
     void on_pushButtonFileCancel_clicked();
     void on_pushButtonRejectFile_clicked();
+    void on_pushButtonAcceptFile_clicked();
 
 private:
     Ui::ChatWindow *ui;
@@ -54,6 +61,17 @@ private:
     UserProfile me;
     FriendProfile friendInfo;
     IMAPI api;
+    QString fileName;
+    QFile receivedFile;
+    QFile sendingFile;
+    QTimer fileSendingTimer;
+    enum
+    {
+        StateFileReceived,
+        StateFileSent,
+        StateFileAborted,
+        StateFileRejected
+    }fileState;
 };
 
 #endif // CHATWINDOW_H

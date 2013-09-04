@@ -8,7 +8,8 @@ extern DataPool g_dataPool;
 
 ChatWindow::ChatWindow(UserProfile me, FriendProfile friendInfo, QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::ChatWindow)
+    ui(new Ui::ChatWindow),
+    fileState(StateFileAborted)
 {
     ui->setupUi(this);
     showButtons(true, false, false, false);
@@ -36,11 +37,41 @@ ChatWindow::ChatWindow(UserProfile me, FriendProfile friendInfo, QWidget *parent
             this, SLOT(connectionAborted(quint32,Connection::ConnectionType)));
     connect(&g_dataPool, SIGNAL(fileRequestResult(quint32,bool)),
             this, SLOT(fileRequestResult(quint32,bool)));
+    connect(&g_dataPool, SIGNAL(fileDataReady(quint32,QByteArray)),
+            this, SLOT(fileDataReady(quint32,QByteArray)));
+    connect(&g_dataPool, SIGNAL(fileReceived(quint32)),
+            this, SLOT(fileReceived(quint32)));
+    connect(&fileSendingTimer, SIGNAL(timeout()), this, SLOT(fileSendData()));
 }
 
 ChatWindow::~ChatWindow()
 {
     delete ui;
+}
+
+void ChatWindow::fileSendData()
+{
+    if(sendingFile.atEnd())
+    {
+        fileState = StateFileSent;
+        g_dataPool.finishSendFile(friendInfo.account);
+        fileSendingTimer.stop();
+        sendingFile.close();
+        ui->labelFileState->setText("发送完毕");
+        showButtons(true, false, false, false);
+        return;
+    }
+    g_dataPool.sendFileData(friendInfo.account, sendingFile.read(1024L * 1024L));
+}
+
+void ChatWindow::fileReceived(quint32 peerUID)
+{
+    if(peerUID != friendInfo.account)
+        return;
+
+    fileState = StateFileReceived;
+    receivedFile.close();
+    g_dataPool.abortSendFile(peerUID);
 }
 
 void ChatWindow::connectionAborted(quint32 peerUID, Connection::ConnectionType type)
@@ -53,8 +84,28 @@ void ChatWindow::connectionAborted(quint32 peerUID, Connection::ConnectionType t
         break;
 
     case Connection::file_connection:
-        ui->labelFileState->setText("文件传输已取消");
+        sendingFile.close();
+        receivedFile.close();
+        switch(fileState)
+        {
+        case StateFileAborted:
+            ui->labelFileState->setText("已取消");
+            break;
+
+        case StateFileRejected:
+            ui->labelFileState->setText("已拒绝");
+            break;
+
+        case StateFileSent:
+            ui->labelFileState->setText("发送成功");
+            break;
+
+        case StateFileReceived:
+            ui->labelFileState->setText("接收完成");
+            break;
+        }
         showButtons(true, false, false, false);
+        fileState = StateFileAborted;
         break;
 
     case Connection::audio_connection:
@@ -92,9 +143,10 @@ void ChatWindow::fileRequest(quint32 peerUID, QString fileName, quint64 fileSize
     if(peerUID != friendInfo.account)
         return;
 
+    this->fileName = fileName;
     ui->labelFileName->setText(fileName);
     ui->labelFileSize->setText(getFileSizeAsString(fileSize));
-    ui->labelFileState->setText("对方向你发送文件");
+    ui->labelFileState->setText("对方发送文件");
     showButtons(false, false, true, true);
 }
 
@@ -133,6 +185,14 @@ void ChatWindow::on_pushButtonChooseFile_clicked()
     path = QFileDialog::getOpenFileName(this, "选择文件");
     if(path.isNull())
         return;
+
+    sendingFile.setFileName(path);
+    if(!sendingFile.open(QFile::ReadOnly))
+    {
+        QMessageBox::warning(this, "提示", QString("无法打开文件 %1").arg(path));
+        return;
+    }
+
     QFileInfo info(path);
 
     ui->labelFileName->setText(info.fileName());
@@ -286,11 +346,13 @@ void ChatWindow::showEvent(QShowEvent *e)
 
 void ChatWindow::on_pushButtonFileCancel_clicked()
 {
+    fileState = StateFileAborted;
     g_dataPool.abortSendFile(friendInfo.account);
 }
 
 void ChatWindow::on_pushButtonRejectFile_clicked()
 {
+    fileState = StateFileRejected;
     ui->labelFileState->setText("已拒绝接收");
     showButtons(true, false, false, false);
     g_dataPool.sendFileRequestResult(friendInfo.account, false);
@@ -305,11 +367,46 @@ void ChatWindow::fileRequestResult(quint32 peerUID, bool accepted)
     if(accepted)
     {
         ui->labelFileState->setText("传输中");
+        showButtons(false, true, false, false);
+        fileSendingTimer.setInterval(1000);
+        fileSendingTimer.start();
     }
     else
     {
+        fileState = StateFileRejected;
         ui->labelFileState->setText("对方拒绝接收文件");
         showButtons(true, false, false, false);
         QMessageBox::information(this, "提示", QString("%1 拒绝接收").arg(friendInfo.nickName));
     }
+}
+
+void ChatWindow::on_pushButtonAcceptFile_clicked()
+{
+    QString path;
+
+    path = QFileDialog::getSaveFileName(this, "保存文件", fileName);
+    if(path.isEmpty())
+    {
+        this->on_pushButtonRejectFile_clicked();
+        return;
+    }
+    receivedFile.setFileName(path);
+    if(!receivedFile.open(QFile::WriteOnly | QFile::Truncate))
+    {
+        QMessageBox::warning(this, "提示", QString("无法创建文件 %1").arg(path));
+        this->on_pushButtonRejectFile_clicked();
+        return;
+    }
+    ui->labelFileState->setText("传输中");
+    showButtons(false, true, false, false);
+    g_dataPool.sendFileRequestResult(friendInfo.account, true);
+}
+
+void ChatWindow::fileDataReady(quint32 peerUID, QByteArray data)
+{
+    if(peerUID != friendInfo.account)
+        return;
+
+    receivedFile.write(data);
+    receivedFile.flush();
 }
