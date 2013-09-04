@@ -32,11 +32,37 @@ ChatWindow::ChatWindow(UserProfile me, FriendProfile friendInfo, QWidget *parent
             this, SLOT(newMessage(quint32,QString)));
     connect(&g_dataPool, SIGNAL(fileRequest(quint32,QString,quint64)),
             this, SLOT(fileRequest(quint32,QString,quint64)));
+    connect(&g_dataPool, SIGNAL(connectionAborted(quint32,Connection::ConnectionType)),
+            this, SLOT(connectionAborted(quint32,Connection::ConnectionType)));
+    connect(&g_dataPool, SIGNAL(fileRequestResult(quint32,bool)),
+            this, SLOT(fileRequestResult(quint32,bool)));
 }
 
 ChatWindow::~ChatWindow()
 {
     delete ui;
+}
+
+void ChatWindow::connectionAborted(quint32 peerUID, Connection::ConnectionType type)
+{
+    if(peerUID != friendInfo.account)
+        return;
+    switch(type)
+    {
+    case Connection::message_connection:
+        break;
+
+    case Connection::file_connection:
+        ui->labelFileState->setText("文件传输已取消");
+        showButtons(true, false, false, false);
+        break;
+
+    case Connection::audio_connection:
+        break;
+
+    default:
+        break;
+    }
 }
 
 void ChatWindow::setUserInfo(UserProfile info)
@@ -256,4 +282,34 @@ void ChatWindow::showEvent(QShowEvent *e)
 {
     inputBox->setFocus();
     e->accept();
+}
+
+void ChatWindow::on_pushButtonFileCancel_clicked()
+{
+    g_dataPool.abortSendFile(friendInfo.account);
+}
+
+void ChatWindow::on_pushButtonRejectFile_clicked()
+{
+    ui->labelFileState->setText("已拒绝接收");
+    showButtons(true, false, false, false);
+    g_dataPool.sendFileRequestResult(friendInfo.account, false);
+    g_dataPool.abortSendFile(friendInfo.account);
+}
+
+void ChatWindow::fileRequestResult(quint32 peerUID, bool accepted)
+{
+    if(peerUID != friendInfo.account)
+        return;
+
+    if(accepted)
+    {
+        ui->labelFileState->setText("传输中");
+    }
+    else
+    {
+        ui->labelFileState->setText("对方拒绝接收文件");
+        showButtons(true, false, false, false);
+        QMessageBox::information(this, "提示", QString("%1 拒绝接收").arg(friendInfo.nickName));
+    }
 }

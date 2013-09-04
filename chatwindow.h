@@ -32,6 +32,8 @@ private:
 private slots:
     void newMessage(quint32 peerUID, QString msg);
     void fileRequest(quint32 peerUID, QString fileName, quint64 fileSize);
+    void fileRequestResult(quint32 peerUID, bool accepted);
+    void connectionAborted(quint32 peerUID, Connection::ConnectionType type);
     void on_pushButtonChooseFile_clicked();
     void on_toolButtonClear_clicked();
     void on_fontComboBox_currentFontChanged(const QFont &f);
@@ -40,6 +42,8 @@ private slots:
     void on_pushButtonSend_clicked();
     void on_toolButtonBold_toggled(bool checked);
     void on_toolButtonItalic_toggled(bool checked);
+    void on_pushButtonFileCancel_clicked();
+    void on_pushButtonRejectFile_clicked();
 
 private:
     Ui::ChatWindow *ui;

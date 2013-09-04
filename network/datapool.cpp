@@ -30,7 +30,7 @@ void DataPool::readyRead()
         return;
     }
 
-    while(1)
+    while(socket->state() == QAbstractSocket::ConnectedState)
     {
         switch(conn.state)
         {
@@ -211,7 +211,8 @@ void DataPool::cleanup()
     {
         qDebug() << accountMap[socket].state;
         if(accountMap[socket].state != Connection::state_done)
-            emit connectionAborted(accountMap[socket].peerUID);
+            emit connectionAborted(accountMap[socket].peerUID,
+                                   accountMap[socket].connectionType);
         accountMap.remove(socket);
     }
 }
@@ -257,8 +258,8 @@ void DataPool::setNewConnection(QTcpSocket *tcpSocket)
     connection.state     = Connection::state_recv_len;
     connection.connectionType = Connection::unknown_connection;
     accountMap[tcpSocket] = connection;
-    connect(tcpSocket, SIGNAL(readyRead()), this, SLOT(readyRead()));
-    connect(tcpSocket, SIGNAL(disconnected()), this, SLOT(cleanup()));
+    connect(tcpSocket, SIGNAL(readyRead()), this, SLOT(readyRead()), Qt::QueuedConnection);
+    connect(tcpSocket, SIGNAL(disconnected()), this, SLOT(cleanup()), Qt::QueuedConnection);
 }
 
 void DataPool::setMessageConnection(QTcpSocket *tcpSocket, quint32 uid, quint32 peerUID)
@@ -278,8 +279,8 @@ void DataPool::setMessageConnection(QTcpSocket *tcpSocket, quint32 uid, quint32 
     connection.connectionType = Connection::message_connection;
     accountMap[tcpSocket] = connection;
 
-    connect(tcpSocket, SIGNAL(readyRead()), this, SLOT(readyRead()));
-    connect(tcpSocket, SIGNAL(disconnected()), this, SLOT(cleanup()));
+    connect(tcpSocket, SIGNAL(readyRead()), this, SLOT(readyRead()), Qt::QueuedConnection);
+    connect(tcpSocket, SIGNAL(disconnected()), this, SLOT(cleanup()), Qt::QueuedConnection);
 }
 
 void DataPool::setFileConnection(QTcpSocket *tcpSocket, quint32 uid,
@@ -301,8 +302,8 @@ void DataPool::setFileConnection(QTcpSocket *tcpSocket, quint32 uid,
     connection.state = Connection::state_recv_len;
     connection.connectionType = Connection::file_connection;
     accountMap[tcpSocket] = connection;
-    connect(tcpSocket, SIGNAL(readyRead()), this, SLOT(readyRead()));
-    connect(tcpSocket, SIGNAL(disconnected()), this, SLOT(cleanup()));
+    connect(tcpSocket, SIGNAL(readyRead()), this, SLOT(readyRead()), Qt::QueuedConnection);
+    connect(tcpSocket, SIGNAL(disconnected()), this, SLOT(cleanup()), Qt::QueuedConnection);
 }
 
 void DataPool::setAudioConnection(QTcpSocket *tcpSocket, quint32 uid, quint32 peerUID)
@@ -321,8 +322,8 @@ void DataPool::setAudioConnection(QTcpSocket *tcpSocket, quint32 uid, quint32 pe
     connection.state = Connection::state_recv_len;
     connection.connectionType = Connection::audio_connection;
     accountMap[tcpSocket] = connection;
-    connect(tcpSocket, SIGNAL(readyRead()), this, SLOT(readyRead()));
-    connect(tcpSocket, SIGNAL(disconnected()), this, SLOT(cleanup()));
+    connect(tcpSocket, SIGNAL(readyRead()), this, SLOT(readyRead()), Qt::QueuedConnection);
+    connect(tcpSocket, SIGNAL(disconnected()), this, SLOT(cleanup()), Qt::QueuedConnection);
 }
 
 bool DataPool::sendMessage(quint32 peerUID, QString msg)

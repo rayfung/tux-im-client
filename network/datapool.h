@@ -83,7 +83,8 @@ signals:
     void audioRequestResult(quint32, bool); //语音通话请求结果
     void audioDataReady(quint32, QByteArray); //语音数据到达
 
-    void connectionAborted(quint32); //结束文本通信、终止文件传输、结束语音通信
+    //结束文本通信、终止文件传输、结束语音通信
+    void connectionAborted(quint32, Connection::ConnectionType type);
 };
 
 #endif // DATAPOOL_H
