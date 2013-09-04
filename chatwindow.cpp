@@ -75,7 +75,7 @@ void ChatWindow::fileSendData()
         return;
     }
     double percentage;
-    g_dataPool.sendFileData(friendInfo.account, sendingFile.read(1024L * 1024L));
+    g_dataPool.sendFileData(friendInfo.account, sendingFile.read(2L * 1024L * 1024L));
     if(sendingFile.size() > 0)
         percentage = (double)sendingFile.pos() / (double)sendingFile.size();
     else
