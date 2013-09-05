@@ -74,8 +74,14 @@ void ChatWindow::fileSendData()
         showButtons(true, false, false, false);
         return;
     }
+
+    qint64 unitMB = 1024L * 1024L;
+
+    if(g_dataPool.bytesToWrite(friendInfo.account, Connection::file_connection) > 3 * unitMB)
+        return;
+
     double percentage;
-    g_dataPool.sendFileData(friendInfo.account, sendingFile.read(2L * 1024L * 1024L));
+    g_dataPool.sendFileData(friendInfo.account, sendingFile.read(2 * unitMB));
     if(sendingFile.size() > 0)
         percentage = (double)sendingFile.pos() / (double)sendingFile.size();
     else
