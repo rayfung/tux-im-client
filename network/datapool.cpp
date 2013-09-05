@@ -225,6 +225,16 @@ bool DataPool::isConnected(quint32 peerUID, Connection::ConnectionType type)
         return false;
 }
 
+qint64 DataPool::bytesToWrite(quint32 peerUID, Connection::ConnectionType type)
+{
+    Connection *conn;
+
+    conn = findConnectionByUID(peerUID, type);
+    if(conn == NULL || conn->tcpSocket == NULL)
+        return 0;
+    return conn->tcpSocket->bytesToWrite();
+}
+
 Connection *DataPool::findConnectionByUID(quint32 peerUID,
                                              enum Connection::ConnectionType type)
 {

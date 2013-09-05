@@ -45,6 +45,7 @@ public:
     void setAudioConnection(QTcpSocket *tcpSocket, quint32 uid, quint32 peerUID);
 
     bool isConnected(quint32 peerUID, Connection::ConnectionType type);
+    qint64 bytesToWrite(quint32 peerUID, Connection::ConnectionType type);
 
     bool sendMessage(quint32 peerUID, QString msg);
     void finishSendMessage(quint32 peerUID);
