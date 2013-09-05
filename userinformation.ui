@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>用户资料</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="images/images.qrc">
+    <normaloff>:/new/images/Tux.png</normaloff>:/new/images/Tux.png</iconset>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
     <layout class="QVBoxLayout" name="verticalLayout">

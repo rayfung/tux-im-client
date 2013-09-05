@@ -16,6 +16,7 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
     a.setQuitOnLastWindowClosed(false);
+    a.setWindowIcon(QIcon(":/new/images/app.png"));
 
     QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
     Config  config;
