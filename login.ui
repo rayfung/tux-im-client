@@ -74,7 +74,11 @@
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="accountLineEdit"/>
+          <widget class="QLineEdit" name="accountLineEdit">
+           <property name="maxLength">
+            <number>20</number>
+           </property>
+          </widget>
          </item>
         </layout>
        </item>
@@ -89,6 +93,9 @@
          </item>
          <item>
           <widget class="QLineEdit" name="pwdLineEdit">
+           <property name="maxLength">
+            <number>20</number>
+           </property>
            <property name="echoMode">
             <enum>QLineEdit::Password</enum>
            </property>
