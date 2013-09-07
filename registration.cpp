@@ -32,6 +32,13 @@ void Registration::on_registerPushButton_clicked()
         QMessageBox::warning(this, "提示", "请填写完整信息!");
         return;
     }
+    if(ui->pwdLineEdit->text().length() < 6)
+    {
+        QMessageBox::information(this, "提示", "密码至少需要六个字符");
+        ui->pwdLineEdit->selectAll();
+        ui->pwdLineEdit->setFocus();
+        return;
+    }
     if(ui->lineEditConfirm->text() != ui->pwdLineEdit->text())
     {
         QMessageBox::warning(this, "提示", "两次输入的密码不一致");
