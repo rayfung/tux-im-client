@@ -75,9 +75,9 @@ void PersonalCenter::on_pushButtonPwdChange_clicked()
                                 QString(""), &ok);
     if(!ok)
         return;
-    if(pwd.isEmpty())
+    if(pwd.length() < 6 || pwd.length() > 20)
     {
-        QMessageBox::information(this, "提示", "内容不能为空!");
+        QMessageBox::information(this, "提示", "密码长度必须在 6 到 20 之间");
         return;
     }
 
@@ -85,12 +85,6 @@ void PersonalCenter::on_pushButtonPwdChange_clicked()
                                  QString(""), &ok);
     if(!ok)
         return;
-    if(pwd2.trimmed().isEmpty())
-    {
-        QMessageBox::information(this, "提示", "内容不能为空!");
-        return;
-    }
-
     if(pwd != pwd2)
     {
         QMessageBox::information(this, "提示", "两次输入的密码不一致，请重试!");
