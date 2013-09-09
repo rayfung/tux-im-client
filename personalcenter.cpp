@@ -6,7 +6,7 @@
 #include <QInputDialog>
 #include <QMessageBox>
 
-PersonalCenter::PersonalCenter(UserProfile userProfile, QWidget *parent) :
+PersonalCenter::PersonalCenter(UserProfile *userProfile, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::PersonalCenter)
 {
@@ -14,11 +14,11 @@ PersonalCenter::PersonalCenter(UserProfile userProfile, QWidget *parent) :
     this->setFixedSize(this->size());
     this->userProfile = userProfile;
 
-    ui->labelNickName->setText(this->userProfile.name);
-    ui->lineEditNickName->setText(this->userProfile.name);
-    ui->lineEditAccount->setText(QString::number(this->userProfile.account));
-    ui->lineEditArea->setText(this->userProfile.area);
-    ui->comboBoxSex->setCurrentIndex(this->userProfile.sex == "m" ? 0 : 1);
+    ui->labelNickName->setText(this->userProfile->name);
+    ui->lineEditNickName->setText(this->userProfile->name);
+    ui->lineEditAccount->setText(QString::number(this->userProfile->account));
+    ui->lineEditArea->setText(this->userProfile->area);
+    ui->comboBoxSex->setCurrentIndex(this->userProfile->sex == "m" ? 0 : 1);
 }
 
 PersonalCenter::~PersonalCenter()
@@ -65,7 +65,7 @@ void PersonalCenter::on_pushButtonPwdChange_clicked()
                                 QString(""), &ok);
     if(!ok)
         return;
-    if(pwd != userProfile.pwd)
+    if(pwd != userProfile->pwd)
     {
         QMessageBox::information(this, "提示", "密码错误");
         return;
@@ -93,7 +93,10 @@ void PersonalCenter::on_pushButtonPwdChange_clicked()
 
     tcpSocket = Utils::getInstance()->getTcpSocket();
     if(imAPI.modifyPwd(tcpSocket, pwd))
+    {
+        this->userProfile->pwd = pwd;
         QMessageBox::information(this, "提示", "密码修改成功!");
+    }
     else
         QMessageBox::information(this, "提示", "网络不稳定，请稍后再试!");
 }

@@ -267,7 +267,7 @@ move_selection:
 
 void Tux::on_pushButtonPersonal_clicked()
 {
-    PersonalCenter  *personalCenter = new PersonalCenter(profile);
+    PersonalCenter  *personalCenter = new PersonalCenter(&profile);
 
     connect(personalCenter, SIGNAL(modifyMessage(QString)),
             this, SLOT(showNewNickName(QString)));

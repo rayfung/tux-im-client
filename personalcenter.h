@@ -14,12 +14,12 @@ class PersonalCenter : public QDialog
     Q_OBJECT
 
 public:
-    explicit PersonalCenter(UserProfile userProfile, QWidget *parent = 0);
+    explicit PersonalCenter(UserProfile *userProfile, QWidget *parent = 0);
     ~PersonalCenter();
 
 private:
     Ui::PersonalCenter *ui;
-    UserProfile userProfile;
+    UserProfile *userProfile;
 
 private slots:
     void on_pushButtonPwdChange_clicked();
