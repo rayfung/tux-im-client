@@ -61,35 +61,45 @@ void PersonalCenter::on_pushButtonPwdChange_clicked()
     QTcpSocket *tcpSocket;
     IMAPI       imAPI;
 
+    pwd = QInputDialog::getText(NULL, "修改密码", "请输入当前密码：", QLineEdit::Password,
+                                QString(""), &ok);
+    if(!ok)
+        return;
+    if(pwd != userProfile.pwd)
+    {
+        QMessageBox::information(this, "提示", "密码错误");
+        return;
+    }
+
     pwd = QInputDialog::getText(NULL, "修改密码", "请输入新密码：", QLineEdit::Password,
                                 QString(""), &ok);
-    if(pwd.trimmed().isEmpty())
+    if(!ok)
+        return;
+    if(pwd.isEmpty())
     {
         QMessageBox::information(this, "提示", "内容不能为空!");
         return;
     }
-    if(ok)
+
+    pwd2 = QInputDialog::getText(NULL, "修改密码", "请确认新密码：", QLineEdit::Password,
+                                 QString(""), &ok);
+    if(!ok)
+        return;
+    if(pwd2.trimmed().isEmpty())
     {
-        pwd2 = QInputDialog::getText(NULL, "修改密码", "请确认新密码：", QLineEdit::Password,
-                                     QString(""), &ok);
-        if(ok)
-        {
-            if(pwd2.trimmed().isEmpty())
-            {
-                QMessageBox::information(this, "提示", "内容不能为空!");
-                return;
-            }
-            if(pwd == pwd2)
-            {
-                tcpSocket = Utils::getInstance()->getTcpSocket();
-                if(!imAPI.modifyPwd(tcpSocket, pwd))
-                {
-                    QMessageBox::information(this, "提示", "网络不稳定，请稍后再试!");
-                }
-                QMessageBox::information(this, "提示", "密码修改成功!");
-                return;
-            }
-            QMessageBox::information(this, "提示", "两次输入的密码不一致，请重试!");
-        }
+        QMessageBox::information(this, "提示", "内容不能为空!");
+        return;
     }
+
+    if(pwd != pwd2)
+    {
+        QMessageBox::information(this, "提示", "两次输入的密码不一致，请重试!");
+        return;
+    }
+
+    tcpSocket = Utils::getInstance()->getTcpSocket();
+    if(imAPI.modifyPwd(tcpSocket, pwd))
+        QMessageBox::information(this, "提示", "密码修改成功!");
+    else
+        QMessageBox::information(this, "提示", "网络不稳定，请稍后再试!");
 }
